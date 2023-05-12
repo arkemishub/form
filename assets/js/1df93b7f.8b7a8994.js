@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocs=self.webpackChunkdocs||[]).push([[237],{9090:(s,c,e)=>{e.r(c),e.d(c,{default:()=>t});var n=e(959),o=e(4477);function t(){const s=(0,o.Z)("/form/docs/install");return(0,n.useEffect)((()=>{window.location.href=s}),[]),null}}}]);
