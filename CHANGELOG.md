@@ -1,0 +1,60 @@
+## [1.2.1](https://github.com/arkemishub/form/compare/v1.2.0...v1.2.1) (2023-03-25)
+
+
+### Bug Fixes
+
+* add values on renderProps ([2cac6c6](https://github.com/arkemishub/form/commit/2cac6c63cf468d10b6fe7f40d9ec2437d49581da))
+
+# [1.2.0](https://github.com/arkemishub/form/compare/v1.1.0...v1.2.0) (2023-03-10)
+
+
+### Features
+
+* rename FormProvider to FormConfigProvider ([6f2ee5b](https://github.com/arkemishub/form/commit/6f2ee5b3ae62452b489487eb2811c7d0b3a3134d))
+
+# 1.0.0 (2023-03-08)
+
+
+### Features
+
+* initial commit ([b0fe9f7](https://github.com/arkemishub/form/commit/b0fe9f711daa8125ae9a443f61751f30a5fadda1))
+* Update README.md ([d4a71e6](https://github.com/arkemishub/form/commit/d4a71e63fef52e96365f10adc666f3cdadaeb0fa))
+
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [1.1.6](https://github.com/arkemishub/arke-monorepo/compare/@arkejs/form@1.1.5...@arkejs/form@1.1.6) (2023-02-02)
+
+**Note:** Version bump only for package @arkejs/form
+
+## [1.1.5](https://github.com/arkemishub/arke-monorepo/compare/@arkejs/form@1.1.4...@arkejs/form@1.1.5) (2023-02-01)
+
+### Bug Fixes
+
+- add id props for form ([#183](https://github.com/arkemishub/arke-monorepo/issues/183)) ([46d9e9d](https://github.com/arkemishub/arke-monorepo/commit/46d9e9d35ec60a755b468a7341aa0cd4b553032a))
+
+## [1.1.4](https://github.com/arkemishub/arke-monorepo/compare/@arkejs/form@1.1.3...@arkejs/form@1.1.4) (2023-01-28)
+
+**Note:** Version bump only for package @arkejs/form
+
+## [1.1.3](https://github.com/arkemishub/arke-monorepo/compare/@arkejs/form@1.1.2...@arkejs/form@1.1.3) (2023-01-27)
+
+### Bug Fixes
+
+- add control on onChange cause is not required function ([#181](https://github.com/arkemishub/arke-monorepo/issues/181)) ([f343f3a](https://github.com/arkemishub/arke-monorepo/commit/f343f3a284cf0155bc1766385e746f87a0869d06))
+
+## [1.1.2](https://github.com/arkemishub/arke-monorepo/compare/@arkejs/form@1.1.1...@arkejs/form@1.1.2) (2023-01-27)
+
+**Note:** Version bump only for package @arkejs/form
+
+## [1.1.1](https://github.com/arkemishub/arke-monorepo/compare/@arkejs/form@1.1.0...@arkejs/form@1.1.1) (2023-01-26)
+
+**Note:** Version bump only for package @arkejs/form
+
+# 1.1.0 (2023-01-26)
+
+### Features
+
+- @arkejs/form ([#178](https://github.com/arkemishub/arke-monorepo/issues/178)) ([b94d6e0](https://github.com/arkemishub/arke-monorepo/commit/b94d6e062e5e7aa2d17b48f8d78f40eac7042dea))
