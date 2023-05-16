@@ -67,6 +67,7 @@ const config = {
     ({
       colorMode: {
         defaultMode: "dark",
+        disableSwitch: true,
       },
       image: "img/og.png",
       navbar: {
