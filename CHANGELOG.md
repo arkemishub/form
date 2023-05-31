@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/arkemishub/form/compare/v1.2.1...v1.2.2) (2023-05-31)
+
+
+### Bug Fixes
+
+* add link type on FormConfigProvider ([#2](https://github.com/arkemishub/form/issues/2)) ([1303603](https://github.com/arkemishub/form/commit/1303603bfc3aa8f658448441694d627a52231f0a))
+
 ## [1.2.1](https://github.com/arkemishub/form/compare/v1.2.0...v1.2.1) (2023-03-25)
 
 
