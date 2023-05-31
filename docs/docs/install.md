@@ -24,9 +24,10 @@ function Application() {
     return (
         <FormConfigProvider
             components={{
-                boolean: (props) => (<input {...props} type="checkbox" />),
-                string: (props) => (<MaterialInput{...props} />),
-                date: (props) => (<TailwindDate{...props} />)
+                boolean: (props) => (<input {...props} type="checkbox" onChange={(e) => props.onChange(e.target.value)} />),
+                string: (props) => (<MaterialInput {...props} onChange={(e) => props.onChange(e.target.value)}/>),
+                date: (props) => (<TailwindDate{...props} onChange={(e) => props.onChange(e.target.value)}/>)
+                default: (props) => (<div>{props.type} not found</div>)
             }}
         >
             ...
@@ -69,6 +70,12 @@ function Application() {
             required: false,
             type: "boolean",
         },
+        {
+            id: "profile_image",
+            label: "Profile image",
+            required: false,
+            type: "string",
+        },
     ];
     
     return (
@@ -83,7 +90,10 @@ function Application() {
                         <Loader size={20} />
                     ) : (
                         <div>
-                            <FormField id={'profile_image'}/>
+                            <FormField id="name"/>
+                            <FormField id="surname"/>
+                            <FormField id="email"/>
+                            <FormField id="active"/>
                         </div>
                     )}
             </Form>
@@ -97,7 +107,7 @@ You can create customized single FormField components through the `component` pr
 
 ```js
 <FormField 
-    field={'profile_image'} 
+    id="profile_image" 
     render={(props) => <ProfileImage {...props}/>} 
 />
 ```
@@ -131,7 +141,7 @@ function Application() {
                     <FormField id="name" type="string" />
                     <FormField id="surname" type="string"/>
                 </div>
-                )}
+            )}
         </Form>
     )
 }

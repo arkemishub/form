@@ -24,8 +24,8 @@ function Application() {
   return (
     <FormConfigProvider
         components={{
-          boolean: (props) => (<input {...props} type="checkbox" />),
-          string: (props) => (<Input{...props} />)
+          boolean: (props) => (<input {...props} type="checkbox" onChange={(e) => props.onChange(e.target.value)} />),
+          string: (props) => (<Input{...props} onChange={(e) => props.onChange(e.target.value)} />)
         }}
     >
       ...
@@ -57,7 +57,7 @@ function Application() {
               <FormField id="name" type="string" />
               <FormField id="surname" type="string"/>
               <FormField
-                id={'profile_image'}
+                id="profile_image"
                 // custom render ignore type 
                 render={(props) => (
                   <AvatarCustomComponent {...props} />
