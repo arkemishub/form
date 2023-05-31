@@ -50,6 +50,7 @@ interface ArkeFormProps {
     datetime(props: RenderProps): ReactNode;
     list(props: RenderProps): ReactNode;
     dict(props: RenderProps): ReactNode;
+    link(props: RenderProps): ReactNode;
     float(props: RenderProps): ReactNode;
     integer(props: RenderProps): ReactNode;
     string(props: RenderProps): ReactNode;
