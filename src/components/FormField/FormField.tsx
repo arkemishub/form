@@ -45,20 +45,22 @@ export default function FormField(
 
   const getComponent = () => {
     try {
-      if (!render) {
-        if (components?.[params?.type]) {
-          return components[params?.type](params);
-        } else {
-          if (components?.default) {
-            return components.default(params);
+      if (Object.keys(params).length > 0) {
+        if (!render) {
+          if (components?.[params?.type]) {
+            return components[params?.type](params);
           } else {
-            if (config?.components[params?.type])
-              return config?.components[params?.type](params);
-            return config?.components.default(params);
+            if (components?.default) {
+              return components.default(params);
+            } else {
+              if (config?.components[params?.type])
+                return config?.components[params?.type](params);
+              return config?.components.default(params);
+            }
           }
+        } else {
+          return render?.(params);
         }
-      } else {
-        return render?.(params);
       }
     } catch (e) {
       console.error(e);
