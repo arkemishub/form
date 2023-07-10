@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/arkemishub/form/compare/v1.2.2...v1.3.0) (2023-07-10)
+
+
+### Features
+
+* render component only when props are ready on FormField ([#7](https://github.com/arkemishub/form/issues/7)) ([ac70aa3](https://github.com/arkemishub/form/commit/ac70aa314d82612b9a9ad5e78c27fb409aa2c1e1))
+
 ## [1.2.2](https://github.com/arkemishub/form/compare/v1.2.1...v1.2.2) (2023-05-31)
 
 
