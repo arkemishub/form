@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/arkemishub/form/compare/v1.3.0...v1.4.0) (2023-07-10)
+
+
+### Features
+
+* remove child function on Form ([#8](https://github.com/arkemishub/form/issues/8)) ([fde9202](https://github.com/arkemishub/form/commit/fde920228b82df4c02e136af9dd2a4e0496d68b6))
+
 # [1.3.0](https://github.com/arkemishub/form/compare/v1.2.2...v1.3.0) (2023-07-10)
 
 
