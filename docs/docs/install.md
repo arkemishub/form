@@ -85,17 +85,16 @@ function Application() {
                 onSubmit={(values) => setData(values)}
                 onChange={(values) => console.log(values)}
             >
-                {({ fields }) =>
-                    loading ? (
-                        <Loader size={20} />
-                    ) : (
-                        <div>
-                            <FormField id="name"/>
-                            <FormField id="surname"/>
-                            <FormField id="email"/>
-                            <FormField id="active"/>
-                        </div>
-                    )}
+                {loading ? (
+                    <Loader size={20} />
+                ) : (
+                    <div>
+                        <FormField id="name"/>
+                        <FormField id="surname"/>
+                        <FormField id="email"/>
+                        <FormField id="active"/>
+                    </div>
+                )}
             </Form>
         </FormConfigProvider>
     )
@@ -130,18 +129,16 @@ function Application() {
                 string: (props) => (<input{...props} />)
             }}
         >
-            {({ fields }) =>
-                <div
-                    style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'auto auto auto auto',
-                        gridGap: '8px 20px',
-                    }}
-                >
-                    <FormField id="name" type="string" />
-                    <FormField id="surname" type="string"/>
-                </div>
-            )}
+            <div
+                style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'auto auto auto auto',
+                    gridGap: '8px 20px',
+                }}
+            >
+                <FormField id="name" type="string" />
+                <FormField id="surname" type="string"/>
+            </div>
         </Form>
     )
 }

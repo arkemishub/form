@@ -42,30 +42,28 @@ import { FormConfigProvider, Form, FormField } from '@arkejs/form'
 function Application() {
   return (
     <FormConfigProvider>
-      <Form
-        onSubmit={(values) => setData(values)}
-        onChange={(values) => console.log(values)}
-      >
-        {({ fields }) =>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'auto auto auto auto',
-                gridGap: '8px 20px',
-              }}
-            >
-              <FormField id="name" type="string" />
-              <FormField id="surname" type="string"/>
-              <FormField
-                id="profile_image"
-                // custom render ignore type 
-                render={(props) => (
-                  <AvatarCustomComponent {...props} />
-                )}
-              />
-            </div>
-          )}
-      </Form>
+       <Form
+         onSubmit={(values) => setData(values)}
+         onChange={(values) => console.log(values)}
+       >
+         <div
+           style={{
+             display: 'grid',
+             gridTemplateColumns: 'auto auto auto auto',
+             gridGap: '8px 20px',
+           }}
+         >
+           <FormField id="name" type="string" />
+           <FormField id="surname" type="string"/>
+           <FormField
+             id="profile_image"
+             // custom render ignore type 
+             render={(props) => (
+               <AvatarCustomComponent {...props} />
+             )}
+           />
+         </div>
+       </Form>
     </FormConfigProvider>
   )
 }
@@ -88,18 +86,16 @@ function Application() {
                 string: (props) => (<input{...props} />)
             }}
         >
-            {({ fields }) =>
-                <div
-                    style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'auto auto auto auto',
-                        gridGap: '8px 20px',
-                    }}
-                >
-                    <FormField id="name" type="string" />
-                    <FormField id="surname" type="string"/>
-                </div>
-                )}
+            <div
+                style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'auto auto auto auto',
+                    gridGap: '8px 20px',
+                }}
+            >
+                <FormField id="name" type="string" />
+                <FormField id="surname" type="string"/>
+            </div>
         </Form>
     )
 }
