@@ -35,13 +35,7 @@ const FormContext: any = createContext(undefined);
 
 interface ArkeFormProps {
   id?: string;
-  children({
-    fields,
-    onSubmit,
-  }: {
-    fields: Field[];
-    onSubmit?(data: FieldValues): void;
-  }): ReactNode;
+  children: ReactNode;
   onChange?(data: FieldValues): void;
   onSubmit?(data: FieldValues): void;
   components?: Partial<{
@@ -79,7 +73,6 @@ export default function Form(props: ArkeFormProps) {
   const form = useReactHookForm();
   const { register, handleSubmit, setValue, getValues } = form;
   const [fields, setFields] = useState<Field[]>([]);
-  const [childFields, setChildFields] = useState<Field[]>([]);
 
   useEffect(() => {
     let params = [...props.fields];
@@ -112,14 +105,13 @@ export default function Form(props: ArkeFormProps) {
     }
     tmpFields = JSON.parse(JSON.stringify(tmpFields));
     walkAllChildren(
-      children({ fields }),
+      children,
       (e: { props: { field: Field; render: RenderProps } }) => {
         if (e.props?.field && e.props?.render) {
           tmpFields = tmpFields.filter((item) => item.id !== e.props.field);
         }
       }
     );
-    setChildFields(tmpFields);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.fields]);
 
@@ -130,7 +122,7 @@ export default function Form(props: ArkeFormProps) {
         onSubmit={handleSubmit(onSubmit as SubmitHandler<FieldValues>)}
         style={style}
       >
-        {Children.only(children({ fields: childFields }))}
+        {children}
       </form>
     </FormContext.Provider>
   );
