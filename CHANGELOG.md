@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/arkemishub/form/compare/v1.4.0...v1.4.1) (2023-07-11)
+
+
+### Bug Fixes
+
+* set initial value of form through the fields ([#9](https://github.com/arkemishub/form/issues/9)) ([215d4d3](https://github.com/arkemishub/form/commit/215d4d350abb1e39bde4ad4af6a1d6cd517895c0))
+
 # [1.4.0](https://github.com/arkemishub/form/compare/v1.3.0...v1.4.0) (2023-07-10)
 
 
