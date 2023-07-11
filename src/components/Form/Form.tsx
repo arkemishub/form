@@ -78,6 +78,7 @@ export default function Form(props: ArkeFormProps) {
     let params = [...props.fields];
     let tmpFields = params.map((param) => {
       register(param.id);
+      setValue(param.id, param.value);
       param.onChange = (value: any) => {
         const tmpParams = [...props.fields];
         const index = tmpParams.indexOf(param);
