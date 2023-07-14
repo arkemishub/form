@@ -3,3 +3,4 @@ dist
 storybook-static
 build-storybook.log
 ./static
+coverage

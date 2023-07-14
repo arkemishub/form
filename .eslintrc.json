@@ -21,6 +21,7 @@
   ],
   "rules": {
     "react/react-in-jsx-scope": "off",
-    "react/no-unknown-property": ["error", { "ignore": ["jsx"] }]
+    "react/no-unknown-property": ["error", { "ignore": ["jsx"] }],
+    "react-hooks/exhaustive-deps": "off"
   }
 }
