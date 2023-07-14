@@ -53,16 +53,6 @@ const fields = [
   },
 ];
 
-const mockWatch = jest.fn(() => true);
-jest.mock("react-hook-form", () => ({
-  ...jest.requireActual("react-hook-form"),
-  useFormContext: () => ({
-    handleSubmit: jest.fn(),
-    getValues: jest.fn(),
-    watch: mockWatch,
-  }),
-}));
-
 export const TestFormConfigProvider = ({
   children,
 }: {
