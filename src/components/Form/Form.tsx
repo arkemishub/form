@@ -26,10 +26,10 @@ import React, {
 import {
   FieldValues,
   SubmitHandler,
+  useFormContext as useReactHookFormContext,
   useForm as useReactHookForm,
-  useFormContext,
+  FormProvider as ReactHookFormProvider,
 } from "react-hook-form";
-import { FormProvider as ReactHookFormProvider } from "react-hook-form";
 import { Field, RenderProps } from "../../types";
 
 const FormConfigContext: any = createContext(undefined);
@@ -73,7 +73,7 @@ export function FormConfigProvider({
 export default function Form(props: ArkeFormProps) {
   const { id, children, components, style, onChange, onSubmit } = props;
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const form = useReactHookForm();
+  const form = useReactHookFormContext() ?? useReactHookForm();
   const { register, handleSubmit, setValue, getValues } = form;
   const [fields, setFields] = useState<Field[]>([]);
 
@@ -116,6 +116,7 @@ export default function Form(props: ArkeFormProps) {
         }
       }
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.fields]);
 
   useEffect(() => {
