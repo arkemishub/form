@@ -73,7 +73,7 @@ export function FormConfigProvider({
 export default function Form(props: ArkeFormProps) {
   const { id, children, components, style, onChange, onSubmit } = props;
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const form = useFormContext() ?? useReactHookForm(); // retrieve all hook methods
+  const form = useReactHookForm();
   const { register, handleSubmit, setValue, getValues } = form;
   const [fields, setFields] = useState<Field[]>([]);
 
@@ -116,7 +116,6 @@ export default function Form(props: ArkeFormProps) {
         }
       }
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.fields]);
 
   useEffect(() => {
