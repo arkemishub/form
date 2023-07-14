@@ -14,5 +14,10 @@
  * limitations under the License.
  */
 
-export { default as Form, FormConfigProvider } from "./Form";
+export {
+  default as Form,
+  FormConfigProvider,
+  FormProvider,
+  useForm,
+} from "./Form";
 export { default as FormField } from "../FormField/FormField";
