@@ -18,6 +18,7 @@ import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import FormField from "./FormField";
 import { Form } from "../Form";
+import { TestFormConfigProvider } from "../Form/Form.test";
 
 const fields = [
   {
@@ -49,9 +50,11 @@ const fields = [
 describe("FormField", () => {
   test("should match snapshot", () => {
     const { asFragment } = render(
-      <Form fields={fields}>
-        <FormField id={"name"} />
-      </Form>
+      <TestFormConfigProvider>
+        <Form fields={fields}>
+          <FormField id={"name"} />
+        </Form>
+      </TestFormConfigProvider>
     );
     expect(asFragment()).toMatchSnapshot();
   });

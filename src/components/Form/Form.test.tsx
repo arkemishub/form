@@ -24,6 +24,7 @@ import {
   useForm,
 } from "../Form";
 import { ReactNode } from "react";
+import { RenderProps } from "../../types";
 
 const fields = [
   {
@@ -62,11 +63,15 @@ jest.mock("react-hook-form", () => ({
   }),
 }));
 
-const TestFormConfigProvider = ({ children }: { children: ReactNode }) => {
+export const TestFormConfigProvider = ({
+  children,
+}: {
+  children: ReactNode;
+}) => {
   return (
     <FormConfigProvider
       components={{
-        string: (props) => (
+        string: (props: RenderProps & { id: string; onChange?(): void }) => (
           <input
             {...props}
             data-testid={props.id}
