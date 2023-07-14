@@ -17,5 +17,6 @@
 module.exports = {
   testEnvironment: "jsdom",
   preset: "ts-jest",
+  coverageReporters: ["text", "html", "cobertura"],
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
 };
