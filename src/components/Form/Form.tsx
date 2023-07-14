@@ -27,11 +27,13 @@ import {
   FieldValues,
   SubmitHandler,
   useForm as useReactHookForm,
+  useFormContext,
 } from "react-hook-form";
+import { FormProvider as ReactHookFormProvider } from "react-hook-form";
 import { Field, RenderProps } from "../../types";
 
 const FormConfigContext: any = createContext(undefined);
-const FormContext: any = createContext(undefined);
+export const FormContext: any = createContext(undefined);
 
 interface ArkeFormProps {
   id?: string;
@@ -70,7 +72,8 @@ export function FormConfigProvider({
 
 export default function Form(props: ArkeFormProps) {
   const { id, children, components, style, onChange, onSubmit } = props;
-  const form = useReactHookForm();
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const form = useFormContext() ?? useReactHookForm(); // retrieve all hook methods
   const { register, handleSubmit, setValue, getValues } = form;
   const [fields, setFields] = useState<Field[]>([]);
 
@@ -116,6 +119,17 @@ export default function Form(props: ArkeFormProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.fields]);
 
+  useEffect(() => {
+    if (fields.length > 0) {
+      let tmpFields = [...fields];
+      tmpFields = tmpFields.map((item) => {
+        item.value = form.watch(item.id) ?? "";
+        return item;
+      });
+      setFields(tmpFields);
+    }
+  }, [form]);
+
   return (
     <FormContext.Provider value={{ fields, components, form, onChange }}>
       <form
@@ -130,4 +144,7 @@ export default function Form(props: ArkeFormProps) {
 }
 
 export const useFormConfig: any = () => useContext(FormConfigContext);
-export const useForm: any = () => useContext(FormContext);
+export const useForm = () => useReactHookForm();
+
+export const useArkeForm: any = () => useContext(FormContext);
+export const FormProvider = ReactHookFormProvider;

@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-import React, { ReactNode } from "react";
-import { useForm, useFormConfig } from "../Form/Form";
+import React, { ReactNode, useEffect } from "react";
+import { useArkeForm, useFormConfig } from "../Form/Form";
 import { RenderProps } from "../../types";
+import { Controller, useForm as useReactHookForm } from "react-hook-form";
 
 interface FormComponentProps {
   id: string;
@@ -27,8 +28,9 @@ export default function FormField(
   props: FormComponentProps & Partial<RenderProps>
 ) {
   const config = useFormConfig();
-  const { fields, components, form, onChange } = useForm();
-  const { setValue, getValues } = form;
+  const methods = useReactHookForm();
+  const { fields, components, onChange } = useArkeForm();
+  const { setValue, getValues } = methods;
   const { id, render } = props;
   const componentProps = (({ id, render, ...o }) => o)(props); // remove id and render
   const defaultParams = {
