@@ -143,3 +143,37 @@ function Application() {
     )
 }
 ```
+
+## Manage the internal state
+
+If you need to use the internal form state or useful functionalities, as looks the value of one field or reset the form 
+state, you can use the `useForm` hook. 
+
+```tsx
+import { Form, FormField } from '@arkejs/form'
+
+function Application() {
+    const formProps = useForm();
+    const { methods } = formProps;
+    const { watch, reset } = methods;
+    const nameValue = watch('name');
+    return (
+        <Form
+            {...formProps}
+            onSubmit={(values) => setData(values)}
+        >
+            <div
+                style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'auto auto auto auto',
+                    gridGap: '8px 20px',
+                }}
+            >
+                <FormField id="name" type="string" />
+                {nameValue.length > 0 &&<FormField id="surname" type="string"/>}
+            </div>
+            <button type="button" onClick={() => reset()}>Reset fields</button>
+        </Form>
+    )
+}
+```
