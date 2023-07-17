@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-import React, { ReactNode, useEffect } from "react";
-import { useArkeForm, useFormConfig } from "../Form/Form";
-import { RenderProps } from "../../types";
-import { Controller, useForm as useReactHookForm } from "react-hook-form";
+import React, { ReactNode, useContext, useEffect } from "react";
+import { FormContext } from "../Form/Form";
+import { FieldType, FormConfigComponents, RenderProps } from "../../types";
+import { useForm as useReactHookForm } from "react-hook-form";
+import { useFormConfig } from "../Form";
 
 interface FormComponentProps {
   id: string;
@@ -29,14 +30,14 @@ export default function FormField(
 ) {
   const config = useFormConfig();
   const methods = useReactHookForm();
-  const { fields, components, onChange } = useArkeForm();
+  const { fields, components, onChange } = useContext(FormContext);
   const { setValue, getValues } = methods;
   const { id, render } = props;
   const componentProps = (({ id, render, ...o }) => o)(props); // remove id and render
   const defaultParams = {
     onChange: (value: any) => {
       setValue(id, value);
-      onChange(getValues());
+      onChange?.(getValues());
     },
   };
   const params =
@@ -48,16 +49,17 @@ export default function FormField(
   const getComponent = () => {
     try {
       if (Object.keys(params).length > 0) {
+        const type = params?.type as FieldType;
         if (!render) {
-          if (components?.[params?.type]) {
-            return components[params?.type](params);
+          if (components?.[type]) {
+            return components[type]?.(params);
           } else {
             if (components?.default) {
               return components.default(params);
             } else {
-              if (config?.components[params?.type])
-                return config?.components[params?.type](params);
-              return config?.components.default(params);
+              if (config?.components[type])
+                return config?.components[type]?.(params);
+              return config?.components.default?.(params);
             }
           }
         } else {

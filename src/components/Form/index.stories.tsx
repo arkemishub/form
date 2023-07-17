@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import React, { ReactNode, useEffect, useState } from "react";
-import Form, { FormConfigProvider, useForm, FormProvider } from "./Form";
+import React, { ReactNode, useState } from "react";
+import Form, { useForm } from "./Form";
+import { FormConfigProvider } from "./FormConfigProvider";
 import FormField from "../FormField/FormField";
 import mockData from "../../__mocks__/mockData";
 import { Field } from "../../types";
@@ -29,8 +30,13 @@ const GeneralFormProvider = ({ children }: { children: ReactNode }) => {
   return (
     <FormConfigProvider
       components={{
-        boolean: (props) => (
+        boolean: (props: {
+          value: boolean | undefined;
+          label: string;
+          onChange(val: boolean): void;
+        }) => (
           <div style={{ display: "flex" }}>
+            {/*// @ts-ignore*/}
             <input
               {...props}
               type="checkbox"
@@ -93,53 +99,50 @@ export const Default = () => {
 };
 
 export const WithFormProvider = () => {
-  const methods = useForm();
+  const formProps = useForm();
+  const { methods } = formProps;
   const [fields] = useState<Field[]>(mockData);
   const [submitData, setSubmitData] = useState({});
 
   return (
     <>
       <GeneralFormProvider>
-        <FormProvider {...methods}>
-          <Form
-            fields={fields}
-            onSubmit={(values) => setSubmitData(values)}
-            // onChange={(values) => console.log(values)}
-          >
-            <div>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "auto auto auto auto",
-                  gridGap: "8px 20px",
-                }}
-              >
-                {fields.map((field: { id: string }) => (
-                  <FormField key={`field-${field.id}`} id={field.id} />
-                ))}
-              </div>
-              <button style={{ marginTop: 20 }}>Submit</button>
+        <Form
+          {...formProps}
+          fields={fields}
+          onSubmit={(values) => setSubmitData(values)}
+          // onChange={(values) => console.log(values)}
+        >
+          <div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "auto auto auto auto",
+                gridGap: "8px 20px",
+              }}
+            >
+              {fields.map((field: { id: string }) => (
+                <FormField key={`field-${field.id}`} id={field.id} />
+              ))}
             </div>
+            <button style={{ marginTop: 20 }}>Submit</button>
+          </div>
 
-            <div style={{ marginTop: 20, display: "flex", gap: 4 }}>
-              <button type="button" onClick={() => methods.reset({})}>
-                Reset
-              </button>
-              <button
-                type="button"
-                onClick={() => methods.setValue("name", "")}
-              >
-                Clean name field
-              </button>
-              <button type="button" onClick={() => methods.register("name")}>
-                register name field
-              </button>
-              <button type="button" onClick={() => methods.unregister("name")}>
-                Unregister name field
-              </button>
-            </div>
-          </Form>
-        </FormProvider>
+          <div style={{ marginTop: 20, display: "flex", gap: 4 }}>
+            <button type="button" onClick={() => methods.reset({})}>
+              Reset
+            </button>
+            <button type="button" onClick={() => methods.setValue("name", "")}>
+              Clean name field
+            </button>
+            <button type="button" onClick={() => methods.register("name")}>
+              register name field
+            </button>
+            <button type="button" onClick={() => methods.unregister("name")}>
+              Unregister name field
+            </button>
+          </div>
+        </Form>
       </GeneralFormProvider>
       <br />
       {JSON.stringify(submitData)}
@@ -172,7 +175,7 @@ export const Render = () => {
               <FormField
                 id="email"
                 label="Email"
-                render={(props) => (
+                render={(props: { onChange(val: string): void }) => (
                   <input
                     {...props}
                     type="email"

@@ -161,19 +161,17 @@ describe("Form", () => {
   test("should get methods with useHook and FormProvider", async () => {
     const onSubmit = jest.fn();
     const { result } = renderHook(() => useForm());
-    const methods = result.current;
-    const { register, watch, getValues, reset } = methods;
+    const formProps = result.current;
+    const { register, watch, getValues, reset } = formProps.methods;
     const { getByTestId } = render(
       <TestFormConfigProvider>
-        <FormProvider {...methods}>
-          <Form fields={fields} onSubmit={onSubmit}>
-            <FormField id={"name"} />
-            {watch("name") && <FormField id={"surname"} />}
-            <button data-testid="form-submit" type="submit">
-              Submit
-            </button>
-          </Form>
-        </FormProvider>
+        <Form fields={fields} onSubmit={onSubmit}>
+          <FormField id={"name"} />
+          {watch("name") && <FormField id={"surname"} />}
+          <button data-testid="form-submit" type="submit">
+            Submit
+          </button>
+        </Form>
       </TestFormConfigProvider>
     );
 
