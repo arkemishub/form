@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
-export * from "./Field";
-export * from "./Form";
-export * from "./RenderProps";
+module.exports = {
+  testEnvironment: "jsdom",
+  preset: "ts-jest",
+  coverageReporters: ["text", "html", "cobertura"],
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+};

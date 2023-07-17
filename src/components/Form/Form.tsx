@@ -14,63 +14,30 @@
  * limitations under the License.
  */
 
-import React, {
-  Children,
-  createContext,
-  CSSProperties,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { Children, createContext, useEffect, useState } from "react";
 import {
   FieldValues,
   SubmitHandler,
+  useFormContext,
   useForm as useReactHookForm,
+  FormProvider as ReactHookFormProvider,
 } from "react-hook-form";
-import { Field, RenderProps } from "../../types";
+import {
+  Field,
+  FormConfigComponents,
+  FormValue,
+  FormProps,
+  RenderProps,
+} from "../../types";
 
-const FormConfigContext: any = createContext(undefined);
-const FormContext: any = createContext(undefined);
+export const FormContext = createContext<FormValue>({
+  components: {} as FormConfigComponents,
+  fields: [] as Field[],
+});
 
-interface ArkeFormProps {
-  id?: string;
-  children: ReactNode;
-  onChange?(data: FieldValues): void;
-  onSubmit?(data: FieldValues): void;
-  components?: Partial<{
-    boolean(props: RenderProps): ReactNode;
-    date(props: RenderProps): ReactNode;
-    datetime(props: RenderProps): ReactNode;
-    list(props: RenderProps): ReactNode;
-    dict(props: RenderProps): ReactNode;
-    link(props: RenderProps): ReactNode;
-    float(props: RenderProps): ReactNode;
-    integer(props: RenderProps): ReactNode;
-    string(props: RenderProps): ReactNode;
-    default(props: RenderProps): ReactNode;
-  }>;
-  fields: Field[];
-  style?: CSSProperties;
-}
-
-export function FormConfigProvider({
-  components,
-  children,
-}: {
-  components: ArkeFormProps["components"];
-  children: ReactNode;
-}) {
-  return (
-    <FormConfigContext.Provider value={{ components }}>
-      {children}
-    </FormConfigContext.Provider>
-  );
-}
-
-export default function Form(props: ArkeFormProps) {
+function FormComponent(props: FormProps) {
   const { id, children, components, style, onChange, onSubmit } = props;
-  const form = useReactHookForm();
+  const form = useFormContext();
   const { register, handleSubmit, setValue, getValues } = form;
   const [fields, setFields] = useState<Field[]>([]);
 
@@ -116,8 +83,25 @@ export default function Form(props: ArkeFormProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.fields]);
 
+  useEffect(() => {
+    if (fields.length > 0) {
+      let tmpFields = [...fields];
+      tmpFields = tmpFields.map((item) => {
+        item.value = form.watch(item.id) ?? "";
+        return item;
+      });
+      setFields(tmpFields);
+    }
+  }, [form]);
+
   return (
-    <FormContext.Provider value={{ fields, components, form, onChange }}>
+    <FormContext.Provider
+      value={{
+        components: components ?? ({} as FormConfigComponents),
+        fields,
+        onChange,
+      }}
+    >
       <form
         id={id}
         onSubmit={handleSubmit(onSubmit as SubmitHandler<FieldValues>)}
@@ -129,5 +113,19 @@ export default function Form(props: ArkeFormProps) {
   );
 }
 
-export const useFormConfig: any = () => useContext(FormConfigContext);
-export const useForm: any = () => useContext(FormContext);
+export default function Form(props: FormProps) {
+  const methods = useReactHookForm();
+  return (
+    <FormProvider {...(props.methods ?? methods)}>
+      <FormComponent {...props}>{props.children}</FormComponent>
+    </FormProvider>
+  );
+}
+
+export const useForm = () => {
+  const methods = useReactHookForm();
+  return {
+    methods,
+  };
+};
+export const FormProvider = ReactHookFormProvider;

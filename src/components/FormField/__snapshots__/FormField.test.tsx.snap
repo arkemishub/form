@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Form should match snapshot 1`] = `
+<DocumentFragment>
+  <form>
+    <button
+      type="submit"
+    >
+      Submit
+    </button>
+  </form>
+</DocumentFragment>
+`;
+
+exports[`FormField should match snapshot 1`] = `
+<DocumentFragment>
+  <form>
+    <input
+      data-testid="name"
+      id="name"
+      label="Name"
+      type="string"
+    />
+  </form>
+</DocumentFragment>
+`;

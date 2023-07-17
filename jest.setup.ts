@@ -14,6 +14,5 @@
  * limitations under the License.
  */
 
-export * from "./Field";
-export * from "./Form";
-export * from "./RenderProps";
+import "@testing-library/jest-dom";
+import "@testing-library/jest-dom/extend-expect";

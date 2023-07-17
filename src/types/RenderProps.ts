@@ -14,10 +14,4 @@
  * limitations under the License.
  */
 
-export type RenderProps = {
-  id: string;
-  label: string;
-  value: any;
-  values?: any;
-  onChange(value: unknown): void;
-};
+export type RenderProps = any;
