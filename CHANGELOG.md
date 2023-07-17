@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/arkemishub/form/compare/v1.4.1...v1.5.0) (2023-07-17)
+
+
+### Features
+
+* useForm and methods ([#10](https://github.com/arkemishub/form/issues/10)) ([fc36c37](https://github.com/arkemishub/form/commit/fc36c377f0f7db533f738b6d6a568dcd70cdc383))
+
 ## [1.4.1](https://github.com/arkemishub/form/compare/v1.4.0...v1.4.1) (2023-07-11)
 
 
