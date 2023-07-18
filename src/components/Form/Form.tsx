@@ -91,7 +91,6 @@ function FormComponent(props: FormProps) {
         }
       }
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.fields]);
 
   return (
