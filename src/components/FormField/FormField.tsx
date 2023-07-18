@@ -23,6 +23,8 @@ function FormField({ components, render, fields, id, ...props }: FieldProps) {
     [render, components, field]
   );
 
+  if (!field) return null;
+
   return (
     <Controller
       control={control}
@@ -30,6 +32,7 @@ function FormField({ components, render, fields, id, ...props }: FieldProps) {
         renderField?.({
           ...params,
           field: {
+            ...field,
             ...params.field,
             id,
             onChange: (event) => {

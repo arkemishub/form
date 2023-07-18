@@ -20,6 +20,8 @@ import {
   cloneElement,
   isValidElement,
   ReactElement,
+  ReactNode,
+  useCallback,
   useMemo,
 } from "react";
 import { MarkRequired } from "../../types/utils";
@@ -35,6 +37,7 @@ function FormComponent({
   methods: { handleSubmit },
   onChange,
   fields,
+  children,
   ...props
 }: MarkRequired<FormProps, "methods">) {
   const config = useFormConfig();
@@ -43,21 +46,30 @@ function FormComponent({
     [config.components, props.components]
   );
 
-  const children = useMemo(() => {
-    return Children.map(props.children, (child) => {
+  const buildChildren = useCallback((children: ReactNode): ReactNode => {
+    return Children.map(children, (child) => {
       if (isValidElement(child)) {
-        if (child?.type === FormField) {
-          return cloneElement(child as ReactElement, {
+        const reactChild = child as ReactElement;
+
+        if (reactChild?.type === FormField) {
+          return cloneElement(reactChild, {
             components,
             fields,
             onChange,
           });
         }
 
-        return child;
+        if (reactChild.props?.children) {
+          return cloneElement(reactChild, {
+            ...reactChild.props,
+            children: buildChildren(reactChild.props.children),
+          });
+        }
       }
+
+      return child;
     });
-  }, [props.children]);
+  }, []);
 
   return (
     <form
@@ -66,7 +78,7 @@ function FormComponent({
       className={className}
       style={style}
     >
-      {children}
+      {buildChildren(children)}
     </form>
   );
 }
