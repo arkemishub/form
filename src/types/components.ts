@@ -1,14 +1,9 @@
-import { Field, FieldType } from "./field";
+import { FieldType } from "./field";
 import { ReactElement } from "react";
-import { MarkRequired } from "./utils";
+import { RenderProps } from "./render";
 
 type FormComponents = Partial<
-  Record<
-    FieldType,
-    (
-      props: MarkRequired<Field<{ [key: string]: any }>, "onChange">
-    ) => ReactElement
-  >
+  Record<FieldType, (props: RenderProps) => ReactElement>
 >;
 
 export type { FormComponents };

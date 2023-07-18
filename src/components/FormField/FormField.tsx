@@ -1,32 +1,47 @@
 import { FieldProps } from "./FormField.types";
-import { useFormContext } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import { FieldType } from "../../types";
 import { useCallback } from "react";
+import { RenderProps } from "../../types/render";
 
 function FormField({ components, render, fields, id, ...props }: FieldProps) {
-  const { register } = useFormContext();
+  const { control } = useFormContext();
 
   const field = fields?.find((item) => item.id === id);
 
-  const renderField = useCallback(() => {
-    if (field) {
-      const { onChange, ...fieldProps } = register(field.id);
-      const type = field?.type as FieldType;
+  const renderField = useCallback(
+    (props: RenderProps) => {
+      if (field) {
+        const type = field?.type as FieldType;
 
-      const handleChange = (event: { target: any; type?: any }) => {
-        onChange(event);
-        props?.onChange?.(event);
-      };
+        if (render) return render(props);
+        if (components?.[type]) return components[type]?.(props);
+      }
 
-      const params = { ...field, ...fieldProps, onChange: handleChange };
-      if (render) return render(params);
-      if (components?.[type]) return components[type]?.(params);
-    }
+      return null;
+    },
+    [render, components, field]
+  );
 
-    return null;
-  }, [render, components, field]);
-
-  return <>{renderField()}</>;
+  return (
+    <Controller
+      control={control}
+      render={(params) =>
+        renderField?.({
+          ...params,
+          field: {
+            ...params.field,
+            id,
+            onChange: (event) => {
+              params.field.onChange(event);
+              props.onChange?.(event);
+            },
+          },
+        }) ?? <></>
+      }
+      name={id}
+    />
+  );
 }
 
 export default FormField;

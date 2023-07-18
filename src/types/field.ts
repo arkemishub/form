@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ReactNode } from "react";
+import { ReactElement } from "react";
+import { RenderProps } from "./render";
 
 type GenericField<TField = any> = {
   id: string;
-  render?: (field: Field<TField>) => ReactNode | string | number;
+  render?: (props: RenderProps) => ReactElement;
   type?: FieldType | string;
   onChange?: (event: { target: any; type?: any }) => void;
 };
 
-type Field<TField> = TField & GenericField;
+type Field<TField = { [key: string]: any }> = GenericField & TField;
 
 enum FieldType {
   Bool = "boolean",

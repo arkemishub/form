@@ -66,8 +66,8 @@ describe("FormField", () => {
       <Form fields={fields}>
         <FormField
           id={"name"}
-          render={(props) => (
-            <input {...props} data-testid={props.id} onChange={onChange} />
+          render={({ field }) => (
+            <input {...field} data-testid={field.id} onChange={onChange} />
           )}
         />
         <button data-testid="form-submit" type="submit">

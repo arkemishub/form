@@ -15,3 +15,4 @@
  */
 
 export { Form } from "./Form";
+export { FormConfigProvider } from "./FormConfigProvider";

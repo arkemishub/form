@@ -26,7 +26,7 @@ type FormProps<TFieldValues extends FieldValues = FieldValues> =
     style?: CSSProperties;
     className?: string;
     components?: FormComponents;
-    fields?: Field<{ [key: string]: any }>[];
+    fields?: Field[];
     onChange?: (event: { target: any; type?: any }) => void;
   }>;
 
