@@ -16,15 +16,10 @@
 
 import { render, renderHook } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import {
-  Form,
-  FormConfigProvider,
-  FormField,
-  FormProvider,
-  useForm,
-} from "../Form";
+import { Form } from "../Form";
 import { ReactNode } from "react";
-import { RenderProps } from "../../types";
+import { FormConfigProvider } from "../FormConfigProvider";
+import { useForm } from "react-hook-form";
 
 const fields = [
   {
@@ -61,11 +56,11 @@ export const TestFormConfigProvider = ({
   return (
     <FormConfigProvider
       components={{
-        string: (props: RenderProps & { id: string; onChange?(): void }) => (
+        string: (props) => (
           <input
             {...props}
             data-testid={props.id}
-            onChange={(e) => props.onChange(e.target.value)}
+            onChange={(e) => props?.onChange?.(e)}
           />
         ),
       }}
@@ -79,8 +74,8 @@ describe("Form", () => {
   test("should match snapshot", () => {
     const { asFragment } = render(
       <Form fields={fields}>
-        <FormField id={"name"} />
-        <FormField id={"surname"} />
+        <Form.Field id={"name"} />
+        <Form.Field id={"surname"} />
         <button type="submit">Submit</button>
       </Form>
     );
@@ -91,7 +86,7 @@ describe("Form", () => {
     const onSubmit = jest.fn();
     const { getByTestId } = render(
       <Form fields={fields} onSubmit={onSubmit}>
-        <FormField id={"name"} />
+        <Form.Field id={"name"} />
         <button data-testid="form-submit" type="submit">
           Submit
         </button>
@@ -107,7 +102,7 @@ describe("Form", () => {
     const { getByTestId } = render(
       <TestFormConfigProvider>
         <Form fields={fields} onChange={onChange}>
-          <FormField id={"name"} label="Name" />
+          <Form.Field id={"name"} label="Name" />
         </Form>
       </TestFormConfigProvider>
     );
@@ -121,7 +116,7 @@ describe("Form", () => {
     const { getByTestId } = render(
       <TestFormConfigProvider>
         <Form fields={fields} onSubmit={onSubmit}>
-          <FormField id={"name"} />
+          <Form.Field id={"name"} />
           <button data-testid="form-submit" type="submit">
             Submit
           </button>
@@ -143,12 +138,12 @@ describe("Form", () => {
             <input
               {...props}
               data-testid={props.id}
-              onChange={(e) => props.onChange(e.target.value)}
+              onChange={(e) => props.onChange(e)}
             />
           ),
         }}
       >
-        <FormField id={"name"} />
+        <Form.Field id={"name"} />
         <button data-testid="form-submit" type="submit">
           Submit
         </button>
@@ -162,12 +157,12 @@ describe("Form", () => {
     const onSubmit = jest.fn();
     const { result } = renderHook(() => useForm());
     const formProps = result.current;
-    const { register, watch, getValues, reset } = formProps.methods;
+    const { register, watch, getValues, reset } = formProps;
     const { getByTestId } = render(
       <TestFormConfigProvider>
         <Form fields={fields} onSubmit={onSubmit}>
-          <FormField id={"name"} />
-          {watch("name") && <FormField id={"surname"} />}
+          <Form.Field id={"name"} />
+          {watch("name") && <Form.Field id={"surname"} />}
           <button data-testid="form-submit" type="submit">
             Submit
           </button>

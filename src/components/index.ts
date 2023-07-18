@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-export * from "./Form";
+export { Form } from "./Form";

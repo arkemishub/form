@@ -14,4 +14,5 @@
  * limitations under the License.
  */
 
-export type RenderProps = any;
+export { default as FormConfigProvider } from "./FormConfigProvider";
+export * from "./FormConfigProvider.types";

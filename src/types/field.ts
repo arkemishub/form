@@ -13,6 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { ReactNode } from "react";
 
-export * from "./components";
-export * from "./field";
+type GenericField<TField = any> = {
+  id: string;
+  render?: (field: Field<TField>) => ReactNode | string | number;
+  type?: FieldType | string;
+  onChange?: (event: { target: any; type?: any }) => void;
+};
+
+type Field<TField> = TField & GenericField;
+
+enum FieldType {
+  Bool = "boolean",
+  Date = "date",
+  Datetime = "datetime",
+  List = "list",
+  Dict = "dict",
+  link = "link",
+  Float = "float",
+  Integer = "integer",
+  String = "string",
+  Time = "time",
+}
+
+export type { Field, GenericField };
+export { FieldType };

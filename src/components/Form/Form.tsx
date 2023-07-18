@@ -14,117 +14,76 @@
  * limitations under the License.
  */
 
-import React, { Children, createContext, useEffect, useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 import {
-  FieldValues,
-  SubmitHandler,
-  useFormContext,
-  useForm as useReactHookForm,
-  FormProvider as ReactHookFormProvider,
-} from "react-hook-form";
-import {
-  Field,
-  FormConfigComponents,
-  FormValue,
-  FormProps,
-  RenderProps,
-} from "../../types";
+  Children,
+  cloneElement,
+  isValidElement,
+  ReactElement,
+  useMemo,
+} from "react";
+import { MarkRequired } from "../../types/utils";
+import FormField from "../FormField/FormField";
+import { useFormConfig } from "../FormConfigProvider/FormConfigProvider";
+import { FormProps } from "./Form.types";
 
-export const FormContext = createContext<FormValue>({
-  components: {} as FormConfigComponents,
-  fields: [] as Field[],
-});
+function FormComponent({
+  id,
+  onSubmit,
+  className,
+  style,
+  methods: { handleSubmit },
+  onChange,
+  fields,
+  ...props
+}: MarkRequired<FormProps, "methods">) {
+  const config = useFormConfig();
+  const components = useMemo(
+    () => ({ ...config.components, ...props.components }),
+    [config.components, props.components]
+  );
 
-function FormComponent(props: FormProps) {
-  const { id, children, components, style, onChange, onSubmit } = props;
-  const form = useFormContext();
-  const { register, handleSubmit, setValue, getValues } = form;
-  const [fields, setFields] = useState<Field[]>([]);
-
-  useEffect(() => {
-    if (fields.length > 0) {
-      let tmpFields = [...fields];
-      tmpFields = tmpFields.map((item) => {
-        item.value = form.watch(item.id) ?? "";
-        return item;
-      });
-      setFields(tmpFields);
-    }
-  }, [form]);
-
-  useEffect(() => {
-    let params = [...props.fields];
-    let tmpFields = params.map((param) => {
-      register(param.id);
-      setValue(param.id, param.value);
-      param.onChange = (value: any) => {
-        const tmpParams = [...props.fields];
-        const index = tmpParams.indexOf(param);
-        tmpParams[index].value = value;
-        setFields(tmpParams);
-        setValue(param.id, value);
-        onChange?.(getValues());
-      };
-      return param;
-    });
-    setFields(tmpFields);
-    if (fields) {
-      params = fields.map((f) => params.find((p) => p.id === f));
-    }
-
-    function walkAllChildren(root: any, callback: any) {
-      function walk(e: any, parents: any) {
-        callback(e, parents);
-        const newParents = [...parents, e];
-        Children.toArray(e.props?.children).forEach((c) => {
-          walk(c, newParents);
-        });
-      }
-      walk(root, []);
-    }
-    tmpFields = JSON.parse(JSON.stringify(tmpFields));
-    walkAllChildren(
-      children,
-      (e: { props: { field: Field; render: RenderProps } }) => {
-        if (e.props?.field && e.props?.render) {
-          tmpFields = tmpFields.filter((item) => item.id !== e.props.field);
+  const children = useMemo(() => {
+    return Children.map(props.children, (child) => {
+      if (isValidElement(child)) {
+        if (child?.type === FormField) {
+          return cloneElement(child as ReactElement, {
+            components,
+            fields,
+            onChange,
+          });
         }
+
+        return child;
       }
-    );
-  }, [props.fields]);
+    });
+  }, [props.children]);
 
   return (
-    <FormContext.Provider
-      value={{
-        components: components ?? ({} as FormConfigComponents),
-        fields,
-        onChange,
-      }}
+    <form
+      id={id}
+      onSubmit={onSubmit ? handleSubmit(onSubmit) : undefined}
+      className={className}
+      style={style}
     >
-      <form
-        id={id}
-        onSubmit={handleSubmit(onSubmit as SubmitHandler<FieldValues>)}
-        style={style}
-      >
-        {children}
-      </form>
-    </FormContext.Provider>
+      {children}
+    </form>
   );
 }
 
-export default function Form(props: FormProps) {
-  const methods = useReactHookForm();
+function Form(props: FormProps) {
+  const defaultMethods = useForm();
+  const methods = useMemo(
+    () => props.methods ?? defaultMethods,
+    [props.methods, defaultMethods]
+  );
+
   return (
-    <FormProvider {...(props.methods ?? methods)}>
-      <FormComponent {...props}>{props.children}</FormComponent>
+    <FormProvider {...methods}>
+      <FormComponent {...props} methods={methods} />
     </FormProvider>
   );
 }
 
-export const useForm = () => {
-  const methods = useReactHookForm();
-  return {
-    methods,
-  };
-};
-export const FormProvider = ReactHookFormProvider;
+Form.Field = FormField;
+export default Form;

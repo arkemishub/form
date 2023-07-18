@@ -16,7 +16,7 @@
 
 import React, { ReactNode, useState } from "react";
 import Form, { useForm } from "./Form";
-import { FormConfigProvider } from "./FormConfigProvider";
+import { FormConfigProvider } from "../FormConfigProvider/FormConfigProvider";
 import FormField from "../FormField/FormField";
 import mockData from "../../__mocks__/mockData";
 import { Field } from "../../types";

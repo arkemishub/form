@@ -19,6 +19,7 @@ exports[`FormField should match snapshot 1`] = `
       data-testid="name"
       id="name"
       label="Name"
+      name="name"
       type="string"
     />
   </form>
