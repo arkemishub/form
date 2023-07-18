@@ -19,7 +19,7 @@ import mockData from "../../__mocks__/mockData";
 import { Field } from "../../types";
 import Form from "./Form";
 import { FormConfigProvider } from "../FormConfigProvider";
-import { useForm } from "react-hook-form";
+import { useForm } from "../../hooks";
 
 export default {
   title: "Form",
@@ -102,7 +102,11 @@ export const WithFormProvider = () => {
   return (
     <>
       <GeneralFormProvider>
-        <Form fields={fields} onSubmit={(values) => setSubmitData(values)}>
+        <Form
+          methods={methods}
+          fields={fields}
+          onSubmit={(values) => setSubmitData(values)}
+        >
           <div>
             <div
               style={{
