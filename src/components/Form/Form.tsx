@@ -42,6 +42,17 @@ function FormComponent(props: FormProps) {
   const [fields, setFields] = useState<Field[]>([]);
 
   useEffect(() => {
+    if (fields.length > 0) {
+      let tmpFields = [...fields];
+      tmpFields = tmpFields.map((item) => {
+        item.value = form.watch(item.id) ?? "";
+        return item;
+      });
+      setFields(tmpFields);
+    }
+  }, [form]);
+
+  useEffect(() => {
     let params = [...props.fields];
     let tmpFields = params.map((param) => {
       register(param.id);
@@ -82,17 +93,6 @@ function FormComponent(props: FormProps) {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.fields]);
-
-  useEffect(() => {
-    if (fields.length > 0) {
-      let tmpFields = [...fields];
-      tmpFields = tmpFields.map((item) => {
-        item.value = form.watch(item.id) ?? "";
-        return item;
-      });
-      setFields(tmpFields);
-    }
-  }, [form]);
 
   return (
     <FormContext.Provider
