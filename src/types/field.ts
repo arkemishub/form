@@ -36,6 +36,7 @@ enum FieldType {
   Integer = "integer",
   String = "string",
   Time = "time",
+  Default = "default",
 }
 
 export type { Field, GenericField };
