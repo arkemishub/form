@@ -42,7 +42,7 @@ function FormField({ components, render, fields, id, ...props }: FieldProps) {
               ...field,
               ...params.field,
               defaultValue,
-              value: params.fieldState.isDirty
+              value: params.formState.isDirty
                 ? params.field.value
                 : defaultValue,
               id,
