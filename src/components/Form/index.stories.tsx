@@ -186,7 +186,7 @@ export const Render = () => {
 };
 
 export const WithDefaultValues = () => {
-  const methods = useForm({ defaultValues: { name: "pippo" } });
+  const methods = useForm();
   const [submitData, setSubmitData] = useState({});
 
   return (
@@ -208,6 +208,60 @@ export const WithDefaultValues = () => {
               {mockFieldsWithValues.map((field: { id: string }) => (
                 <Form.Field key={`field-${field.id}`} id={field.id} />
               ))}
+            </div>
+            <button style={{ marginTop: 20 }}>Submit</button>
+          </div>
+        </Form>
+      </GeneralFormProvider>
+      <br />
+      {JSON.stringify(submitData)}
+    </>
+  );
+};
+
+export const WithInternalDependency = () => {
+  const methods = useForm();
+  const [submitData, setSubmitData] = useState({});
+
+  return (
+    <>
+      <GeneralFormProvider>
+        <Form
+          methods={methods}
+          fields={mockFields}
+          onSubmit={(values) => setSubmitData(values)}
+        >
+          <div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "auto auto auto auto",
+                gridGap: "8px 20px",
+              }}
+            >
+              <Form.Field
+                id="name"
+                render={({ field }) => (
+                  <input
+                    {...field}
+                    placeholder={field.label}
+                    onChange={(e) => {
+                      field.onChange(e.target.value);
+                      methods.setValue("surname", "Test");
+                    }}
+                  />
+                )}
+              />
+              <Form.Field
+                id="surname"
+                render={({ field }) => (
+                  <input
+                    {...field}
+                    placeholder={field.label}
+                    onChange={(e) => field.onChange(e.target.value)}
+                  />
+                )}
+              />
             </div>
             <button style={{ marginTop: 20 }}>Submit</button>
           </div>

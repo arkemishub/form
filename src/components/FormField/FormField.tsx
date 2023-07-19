@@ -7,6 +7,7 @@ import { RenderProps } from "../../types/render";
 function FormField({ components, render, fields, id, ...props }: FieldProps) {
   const {
     control,
+    watch,
     formState: { defaultValues },
   } = useFormContext();
 
@@ -35,6 +36,16 @@ function FormField({ components, render, fields, id, ...props }: FieldProps) {
     <Controller
       control={control}
       render={(params) => {
+        console.log({
+          ...params,
+          field: {
+            ...field,
+            ...params.field,
+            defaultValue,
+            value: params.formState.isDirty ? params.field.value : defaultValue,
+            id,
+          },
+        });
         return (
           renderField?.({
             ...params,
@@ -42,9 +53,7 @@ function FormField({ components, render, fields, id, ...props }: FieldProps) {
               ...field,
               ...params.field,
               defaultValue,
-              value: params.formState.isDirty
-                ? params.field.value
-                : defaultValue,
+              value: watch(id) ? params.field.value : defaultValue,
               id,
               onChange: (event) => {
                 params.field.onChange(event);
