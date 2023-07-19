@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { useForm as useReactHookForm, UseFormReturn } from "react-hook-form";
-import { UseFormProps } from "./useForm.types";
+import { useForm as useReactHookForm } from "react-hook-form";
+import { UseFormProps, UseFormReturn } from "./useForm.types";
 import { useMemo, useState } from "react";
 import { Field } from "../../types";
 
@@ -44,7 +44,7 @@ function useForm(props?: UseFormProps): UseFormReturn {
     setPrevFields(fields);
   }
 
-  return methods;
+  return { methods, formProps: { methods, fields } };
 }
 
 export default useForm;

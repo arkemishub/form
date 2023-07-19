@@ -88,7 +88,7 @@ function FormComponent({
 }
 
 function Form({ getFieldDefaultValue, ...props }: OuterFormProps) {
-  const defaultMethods = useForm(
+  const { methods: defaultMethods } = useForm(
     props?.fields && getFieldDefaultValue
       ? {
           fields: props.fields,

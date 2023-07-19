@@ -14,8 +14,13 @@
  * limitations under the License.
  */
 
-import type { UseFormProps as HookFormUseFormProps } from "react-hook-form";
+import type {
+  UseFormProps as HookFormUseFormProps,
+  UseFormReturn as HookFormUseFormReturn,
+} from "react-hook-form";
 import { Field } from "../../types";
+import { FormProps } from "../../components/Form/Form.types";
+import { MarkRequired } from "../../types/utils";
 
 type UseFormProps = HookFormUseFormProps &
   (
@@ -23,4 +28,9 @@ type UseFormProps = HookFormUseFormProps &
     | { fields: Field[]; getFieldDefaultValue: (field: Field) => any }
   );
 
-export type { UseFormProps };
+type UseFormReturn = {
+  methods: HookFormUseFormReturn;
+  formProps: MarkRequired<FormProps, "methods">;
+};
+
+export type { UseFormProps, UseFormReturn };

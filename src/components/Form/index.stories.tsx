@@ -59,7 +59,7 @@ const GeneralFormProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export const Default = () => {
-  const methods = useForm();
+  const { methods } = useForm();
   const [submitData, setSubmitData] = useState({});
 
   return (
@@ -93,7 +93,7 @@ export const Default = () => {
 };
 
 export const WithFormProvider = () => {
-  const methods = useForm();
+  const { methods } = useForm();
 
   const [submitData, setSubmitData] = useState({});
 
@@ -188,7 +188,7 @@ export const Render = () => {
 };
 
 export const WithDefaultValues = () => {
-  const methods = useForm({
+  const { formProps } = useForm({
     fields: mockFieldsWithValues,
     getFieldDefaultValue: (field) => field.value,
   });
@@ -197,11 +197,7 @@ export const WithDefaultValues = () => {
   return (
     <>
       <GeneralFormProvider>
-        <Form
-          methods={methods}
-          fields={mockFieldsWithValues}
-          onSubmit={(values) => setSubmitData(values)}
-        >
+        <Form {...formProps} onSubmit={(values) => setSubmitData(values)}>
           <div>
             <div
               style={{
@@ -233,7 +229,7 @@ export const WithChangingFields = () => {
     }, 2000);
   }, []);
 
-  const methods = useForm({
+  const { formProps } = useForm({
     fields,
     getFieldDefaultValue: (field) => field.value,
   });
@@ -243,11 +239,7 @@ export const WithChangingFields = () => {
     <>
       Values will load after 2 seconds
       <GeneralFormProvider>
-        <Form
-          methods={methods}
-          fields={mockFieldsWithValues}
-          onSubmit={(values) => setSubmitData(values)}
-        >
+        <Form {...formProps} onSubmit={(values) => setSubmitData(values)}>
           <div>
             <div
               style={{
@@ -271,7 +263,7 @@ export const WithChangingFields = () => {
 };
 
 export const WithInternalDependency = () => {
-  const methods = useForm();
+  const { methods } = useForm();
   const [submitData, setSubmitData] = useState({});
 
   return (
