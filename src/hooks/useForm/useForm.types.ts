@@ -25,7 +25,7 @@ import { MarkRequired } from "../../types/utils";
 type UseFormProps = HookFormUseFormProps &
   (
     | { fields: undefined; getFieldDefaultValue?: never }
-    | { fields: Field[]; getFieldDefaultValue: (field: Field) => any }
+    | { fields: Field[]; getFieldDefaultValue?: (field: Field) => any }
   );
 
 type UseFormReturn = {

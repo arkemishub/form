@@ -35,7 +35,7 @@ type OuterFormProps<TFieldValues extends FieldValues = any> = Omit<
 > &
   (
     | { methods: UseFormReturn<TFieldValues>; getFieldDefaultValue?: never }
-    | { methods?: undefined; getFieldDefaultValue: (field: Field) => any }
+    | { methods?: undefined; getFieldDefaultValue?: (field: Field) => any }
   );
 
 export type { FormProps, OuterFormProps };
