@@ -46,30 +46,33 @@ function FormComponent({
     [config.components, props.components]
   );
 
-  const buildChildren = useCallback((children: ReactNode): ReactNode => {
-    return Children.map(children, (child) => {
-      if (isValidElement(child)) {
-        const reactChild = child as ReactElement;
+  const buildChildren = useCallback(
+    (children: ReactNode): ReactNode => {
+      return Children.map(children, (child) => {
+        if (isValidElement(child)) {
+          const reactChild = child as ReactElement;
 
-        if (reactChild?.type === FormField) {
-          return cloneElement(reactChild, {
-            components,
-            fields,
-            onChange,
-          });
+          if (reactChild?.type === FormField) {
+            return cloneElement(reactChild, {
+              components,
+              fields,
+              onChange,
+            });
+          }
+
+          if (reactChild.props?.children) {
+            return cloneElement(reactChild, {
+              ...reactChild.props,
+              children: buildChildren(reactChild.props.children),
+            });
+          }
         }
 
-        if (reactChild.props?.children) {
-          return cloneElement(reactChild, {
-            ...reactChild.props,
-            children: buildChildren(reactChild.props.children),
-          });
-        }
-      }
-
-      return child;
-    });
-  }, []);
+        return child;
+      });
+    },
+    [fields, components, onChange]
+  );
 
   return (
     <form
