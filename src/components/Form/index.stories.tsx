@@ -186,7 +186,7 @@ export const Render = () => {
 };
 
 export const WithDefaultValues = () => {
-  const methods = useForm();
+  const methods = useForm({ defaultValues: { name: "pippo" } });
   const [submitData, setSubmitData] = useState({});
 
   return (
