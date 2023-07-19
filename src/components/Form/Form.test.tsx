@@ -19,7 +19,7 @@ import userEvent from "@testing-library/user-event";
 import { Form } from "../Form";
 import { ReactNode } from "react";
 import { FormConfigProvider } from "../FormConfigProvider";
-import { useForm } from "react-hook-form";
+import { useForm } from "../../hooks";
 
 const fields = [
   {
@@ -45,6 +45,35 @@ const fields = [
     required: false,
     type: "string",
     values: null,
+  },
+];
+
+const fieldsWithValue = [
+  {
+    default: "Default value",
+    helper_text: null,
+    id: "name",
+    label: "Name",
+    max_length: null,
+    min_length: null,
+    multiple: false,
+    required: false,
+    type: "string",
+    values: null,
+    value: "John",
+  },
+  {
+    default: null,
+    helper_text: null,
+    id: "surname",
+    label: "Surname",
+    max_length: null,
+    min_length: null,
+    multiple: false,
+    required: false,
+    type: "string",
+    values: null,
+    value: "Doe",
   },
 ];
 
@@ -74,6 +103,17 @@ describe("Form", () => {
   test("should match snapshot", () => {
     const { asFragment } = render(
       <Form fields={fields}>
+        <Form.Field id={"name"} />
+        <Form.Field id={"surname"} />
+        <button type="submit">Submit</button>
+      </Form>
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+
+  test("should match snapshot with values", () => {
+    const { asFragment } = render(
+      <Form fields={fieldsWithValue}>
         <Form.Field id={"name"} />
         <Form.Field id={"surname"} />
         <button type="submit">Submit</button>
@@ -153,10 +193,64 @@ describe("Form", () => {
     expect(getByTestId("name")).toBeInTheDocument();
   });
 
-  test("should get methods with useHook and FormProvider", async () => {
+  test("should render default component if component type doesn't exist", async () => {
+    const onSubmit = jest.fn();
+    const { getByText } = render(
+      <Form
+        fields={fields}
+        onSubmit={onSubmit}
+        components={{
+          default: ({ field }) => <div>Component not found</div>,
+        }}
+      >
+        <Form.Field id={"name"} />
+        <button data-testid="form-submit" type="submit">
+          Submit
+        </button>
+      </Form>
+    );
+
+    expect(getByText("Component not found")).toBeInTheDocument();
+  });
+
+  test("should Form.Field has value if Form has fields with value", async () => {
+    const { getByTestId } = render(
+      <TestFormConfigProvider>
+        <Form fields={fieldsWithValue}>
+          <Form.Field id={"name"} label="Name" />
+        </Form>
+      </TestFormConfigProvider>
+    );
+
+    expect(getByTestId("name")).toHaveAttribute("value", "John");
+  });
+
+  test("should get defaultValue using getFieldDefaultValue", async () => {
+    const { result } = renderHook(() =>
+      useForm({
+        fields: fieldsWithValue.map((item) => {
+          // @ts-ignore
+          item.defaultValue = item.default;
+          return item;
+        }),
+        getFieldDefaultValue: (field) => field.defaultValue,
+      })
+    );
+    const { getByTestId } = render(
+      <TestFormConfigProvider>
+        <Form {...result.current.formProps}>
+          <Form.Field id={"name"} label="Name" />
+        </Form>
+      </TestFormConfigProvider>
+    );
+
+    expect(getByTestId("name")).toHaveAttribute("value", "Default value");
+  });
+
+  test("should get methods and formProps with useHook", async () => {
     const onSubmit = jest.fn();
     const { result } = renderHook(() => useForm());
-    const { register, watch, getValues, reset } = result.current;
+    const { register, watch, getValues, reset } = result.current.methods;
     const { getByTestId } = render(
       <TestFormConfigProvider>
         <Form fields={fields} onSubmit={onSubmit}>
