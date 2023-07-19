@@ -36,16 +36,6 @@ function FormField({ components, render, fields, id, ...props }: FieldProps) {
     <Controller
       control={control}
       render={(params) => {
-        console.log({
-          ...params,
-          field: {
-            ...field,
-            ...params.field,
-            defaultValue,
-            value: params.formState.isDirty ? params.field.value : defaultValue,
-            id,
-          },
-        });
         return (
           renderField?.({
             ...params,
