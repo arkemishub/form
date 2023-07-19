@@ -186,8 +186,11 @@ export const Render = () => {
 };
 
 export const WithDefaultValues = () => {
-  const methods = useForm({ defaultValues: { name: "pippo" } });
-  const [submitData, setSubmitData] = useState({});
+  const methods = useForm({
+    fields: mockFieldsWithValues,
+    getFieldDefaultValue: (field) => field.value,
+  });
+  const [submitData, setSubmitData] = useState();
 
   return (
     <>
@@ -205,7 +208,48 @@ export const WithDefaultValues = () => {
                 gridGap: "8px 20px",
               }}
             >
-              {mockFieldsWithValues.map((field: { id: string }) => (
+              {mockFieldsWithValues.map((field) => (
+                <Form.Field key={`field-${field.id}`} id={field.id} />
+              ))}
+            </div>
+            <button style={{ marginTop: 20 }}>Submit</button>
+          </div>
+        </Form>
+      </GeneralFormProvider>
+      <br />
+      {JSON.stringify(submitData)}
+    </>
+  );
+};
+
+export const WithLoadingProps = () => {
+  const methods = useForm({
+    fields: async () =>
+      await new Promise((resolve) => setTimeout(resolve, 2000)).then(
+        () => mockFieldsWithValues
+      ),
+    getFieldDefaultValue: (field) => field.value,
+  });
+  const [submitData, setSubmitData] = useState();
+
+  return (
+    <>
+      Values will load after 2 seconds
+      <GeneralFormProvider>
+        <Form
+          methods={methods}
+          fields={mockFieldsWithValues}
+          onSubmit={(values) => setSubmitData(values)}
+        >
+          <div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "auto auto auto auto",
+                gridGap: "8px 20px",
+              }}
+            >
+              {mockFieldsWithValues.map((field) => (
                 <Form.Field key={`field-${field.id}`} id={field.id} />
               ))}
             </div>

@@ -5,10 +5,7 @@ import { useCallback } from "react";
 import { RenderProps } from "../../types/render";
 
 function FormField({ components, render, fields, id, ...props }: FieldProps) {
-  const {
-    control,
-    formState: { defaultValues },
-  } = useFormContext();
+  const { control } = useFormContext();
 
   const field = fields?.find((item) => item.id === id);
 
@@ -28,9 +25,6 @@ function FormField({ components, render, fields, id, ...props }: FieldProps) {
 
   if (!field) return null;
 
-  const defaultValue =
-    field?.value ?? field?.defaultValue ?? defaultValues?.[id] ?? "";
-
   return (
     <Controller
       control={control}
@@ -41,7 +35,6 @@ function FormField({ components, render, fields, id, ...props }: FieldProps) {
             field: {
               ...field,
               ...params.field,
-              defaultValue,
               id,
               onChange: (event) => {
                 params.field.onChange(event);

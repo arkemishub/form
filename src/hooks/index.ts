@@ -14,4 +14,5 @@
  * limitations under the License.
  */
 
-export { useFormContext, useForm } from "react-hook-form";
+export { useFormContext } from "react-hook-form";
+export { useForm } from "./useForm";
