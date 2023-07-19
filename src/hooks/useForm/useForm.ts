@@ -27,12 +27,12 @@ function useForm(props?: UseFormProps): UseFormReturn {
   );
 
   const computedDefaultValues = useMemo(() => {
-    if (getFieldDefaultValue) {
-      return fields?.reduce((acc: Record<string, any>, field) => {
-        acc[field.id] = getFieldDefaultValue?.(field);
-        return acc;
-      }, {});
-    }
+    return fields?.reduce((acc: Record<string, any>, field) => {
+      acc[field.id] = getFieldDefaultValue
+        ? getFieldDefaultValue(field)
+        : field.value;
+      return acc;
+    }, {});
   }, [fields, getFieldDefaultValue]);
 
   const defaultValues = forwarded?.defaultValues || computedDefaultValues;
