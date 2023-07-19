@@ -19,11 +19,8 @@ import { Field } from "../../types";
 
 type UseFormProps = HookFormUseFormProps &
   (
-    | {
-        getFieldDefaultValue: (field: Field) => any;
-        fields: Field[];
-      }
-    | { fields?: undefined; getFieldDefaultValue?: undefined }
+    | { fields: undefined; getFieldDefaultValue?: never }
+    | { fields: Field[]; getFieldDefaultValue: (field: Field) => any }
   );
 
 export type { UseFormProps };

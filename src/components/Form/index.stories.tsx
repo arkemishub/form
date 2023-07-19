@@ -152,6 +152,7 @@ export const Render = () => {
           fields={mockFields}
           onSubmit={(values) => setSubmitData(values)}
           onChange={(values) => console.log(values)}
+          getFieldDefaultValue={(field) => field.value}
         >
           <div>
             <div

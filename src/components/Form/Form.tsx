@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider } from "react-hook-form";
 import {
   Children,
   cloneElement,
@@ -27,7 +27,8 @@ import {
 import { MarkRequired } from "../../types/utils";
 import FormField from "../FormField/FormField";
 import { useFormConfig } from "../FormConfigProvider/FormConfigProvider";
-import { FormProps } from "./Form.types";
+import { FormProps, OuterFormProps } from "./Form.types";
+import { useForm } from "../../hooks";
 
 function FormComponent({
   id,
@@ -86,8 +87,15 @@ function FormComponent({
   );
 }
 
-function Form(props: FormProps) {
-  const defaultMethods = useForm();
+function Form({ getFieldDefaultValue, ...props }: OuterFormProps) {
+  const defaultMethods = useForm(
+    props?.fields && getFieldDefaultValue
+      ? {
+          fields: props.fields,
+          getFieldDefaultValue,
+        }
+      : undefined
+  );
   const methods = useMemo(
     () => props.methods ?? defaultMethods,
     [props.methods, defaultMethods]

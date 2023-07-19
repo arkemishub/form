@@ -29,4 +29,13 @@ type FormProps<TFieldValues extends FieldValues = any> = PropsWithChildren<{
   onChange?: (event: { target: any; type?: any }) => void;
 }>;
 
-export type { FormProps };
+type OuterFormProps<TFieldValues extends FieldValues = any> = Omit<
+  FormProps<TFieldValues>,
+  "methods"
+> &
+  (
+    | { methods: UseFormReturn<TFieldValues>; getFieldDefaultValue?: never }
+    | { methods?: undefined; getFieldDefaultValue: (field: Field) => any }
+  );
+
+export type { FormProps, OuterFormProps };
