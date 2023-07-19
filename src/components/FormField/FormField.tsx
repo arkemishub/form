@@ -5,7 +5,11 @@ import { useCallback } from "react";
 import { RenderProps } from "../../types/render";
 
 function FormField({ components, render, fields, id, ...props }: FieldProps) {
-  const { control } = useFormContext();
+  const {
+    control,
+    getValues,
+    formState: { defaultValues },
+  } = useFormContext();
 
   const field = fields?.find((item) => item.id === id);
 
@@ -25,23 +29,32 @@ function FormField({ components, render, fields, id, ...props }: FieldProps) {
 
   if (!field) return null;
 
+  const defaultValue =
+    field?.value ?? field?.defaultValue ?? defaultValues?.[id] ?? "";
+
   return (
     <Controller
       control={control}
-      render={(params) =>
-        renderField?.({
-          ...params,
-          field: {
-            ...field,
-            ...params.field,
-            id,
-            onChange: (event) => {
-              params.field.onChange(event);
-              props.onChange?.(event);
+      render={(params) => {
+        return (
+          renderField?.({
+            ...params,
+            field: {
+              ...field,
+              ...params.field,
+              defaultValue,
+              value: params.fieldState.isDirty
+                ? params.field.value
+                : defaultValue,
+              id,
+              onChange: (event) => {
+                params.field.onChange(event);
+                props.onChange?.(event);
+              },
             },
-          },
-        }) ?? <></>
-      }
+          }) ?? <></>
+        );
+      }}
       name={id}
     />
   );

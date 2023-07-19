@@ -15,8 +15,7 @@
  */
 
 import React, { ReactNode, useState } from "react";
-import mockData from "../../__mocks__/mockData";
-import { Field } from "../../types";
+import { mockFields, mockFieldsWithValues } from "../../__mocks__/fields";
 import Form from "./Form";
 import { FormConfigProvider } from "../FormConfigProvider";
 import { useForm } from "../../hooks";
@@ -60,7 +59,6 @@ const GeneralFormProvider = ({ children }: { children: ReactNode }) => {
 
 export const Default = () => {
   const methods = useForm();
-  const [fields] = useState<Field[]>(mockData);
   const [submitData, setSubmitData] = useState({});
 
   return (
@@ -68,7 +66,7 @@ export const Default = () => {
       <GeneralFormProvider>
         <Form
           methods={methods}
-          fields={fields}
+          fields={mockFields}
           onSubmit={(values) => setSubmitData(values)}
         >
           <div>
@@ -79,7 +77,7 @@ export const Default = () => {
                 gridGap: "8px 20px",
               }}
             >
-              {fields.map((field: { id: string }) => (
+              {mockFields.map((field: { id: string }) => (
                 <Form.Field key={`field-${field.id}`} id={field.id} />
               ))}
             </div>
@@ -96,7 +94,6 @@ export const Default = () => {
 export const WithFormProvider = () => {
   const methods = useForm();
 
-  const [fields] = useState<Field[]>(mockData);
   const [submitData, setSubmitData] = useState({});
 
   return (
@@ -104,7 +101,7 @@ export const WithFormProvider = () => {
       <GeneralFormProvider>
         <Form
           methods={methods}
-          fields={fields}
+          fields={mockFields}
           onSubmit={(values) => setSubmitData(values)}
         >
           <div>
@@ -115,7 +112,7 @@ export const WithFormProvider = () => {
                 gridGap: "8px 20px",
               }}
             >
-              {fields.map((field: { id: string }) => (
+              {mockFields.map((field: { id: string }) => (
                 <Form.Field key={`field-${field.id}`} id={field.id} />
               ))}
             </div>
@@ -145,14 +142,13 @@ export const WithFormProvider = () => {
 };
 
 export const Render = () => {
-  const [data] = useState<Field[]>(mockData);
   const [submitData, setSubmitData] = useState({});
 
   return (
     <>
       <GeneralFormProvider>
         <Form
-          fields={data}
+          fields={mockFields}
           onSubmit={(values) => setSubmitData(values)}
           onChange={(values) => console.log(values)}
         >
@@ -178,6 +174,40 @@ export const Render = () => {
                 )}
               />
               <Form.Field id="active" label="Is Active?" />
+            </div>
+            <button style={{ marginTop: 20 }}>Submit</button>
+          </div>
+        </Form>
+      </GeneralFormProvider>
+      <br />
+      {JSON.stringify(submitData)}
+    </>
+  );
+};
+
+export const WithDefaultValues = () => {
+  const methods = useForm({ defaultValues: { name: "pippo" } });
+  const [submitData, setSubmitData] = useState({});
+
+  return (
+    <>
+      <GeneralFormProvider>
+        <Form
+          methods={methods}
+          fields={mockFieldsWithValues}
+          onSubmit={(values) => setSubmitData(values)}
+        >
+          <div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "auto auto auto auto",
+                gridGap: "8px 20px",
+              }}
+            >
+              {mockFieldsWithValues.map((field: { id: string }) => (
+                <Form.Field key={`field-${field.id}`} id={field.id} />
+              ))}
             </div>
             <button style={{ marginTop: 20 }}>Submit</button>
           </div>
