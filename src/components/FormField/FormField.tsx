@@ -7,7 +7,6 @@ import { RenderProps } from "../../types/render";
 function FormField({ components, render, fields, id, ...props }: FieldProps) {
   const {
     control,
-    getValues,
     formState: { defaultValues },
   } = useFormContext();
 

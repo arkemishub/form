@@ -18,16 +18,15 @@ import { FieldValues, SubmitHandler, UseFormReturn } from "react-hook-form";
 import { CSSProperties, PropsWithChildren } from "react";
 import { Field, FormComponents } from "../../types";
 
-type FormProps<TFieldValues extends FieldValues = FieldValues> =
-  PropsWithChildren<{
-    id?: string;
-    methods?: UseFormReturn<TFieldValues>;
-    onSubmit?: SubmitHandler<TFieldValues>;
-    style?: CSSProperties;
-    className?: string;
-    components?: FormComponents;
-    fields?: Field[];
-    onChange?: (event: { target: any; type?: any }) => void;
-  }>;
+type FormProps<TFieldValues extends FieldValues = any> = PropsWithChildren<{
+  id?: string;
+  methods?: UseFormReturn<TFieldValues>;
+  onSubmit?: SubmitHandler<TFieldValues>;
+  style?: CSSProperties;
+  className?: string;
+  components?: FormComponents;
+  fields?: Field[];
+  onChange?: (event: { target: any; type?: any }) => void;
+}>;
 
 export type { FormProps };
