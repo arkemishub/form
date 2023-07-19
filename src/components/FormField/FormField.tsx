@@ -32,6 +32,7 @@ function FormField({ components, render, fields, id, ...props }: FieldProps) {
 
         if (render) return render(props);
         if (components?.[type]) return components[type]?.(props);
+        if (components?.["default"]) return components["default"]?.(props);
       }
 
       return null;

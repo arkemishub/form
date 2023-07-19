@@ -50,7 +50,7 @@ const GeneralFormProvider = ({ children }: { children: ReactNode }) => {
             />
           </>
         ),
-        // default: () => <div>Component not found</div>,
+        default: () => <div>Component not found</div>,
       }}
     >
       {children}
