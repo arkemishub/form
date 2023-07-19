@@ -21,7 +21,7 @@ type UseFormProps = HookFormUseFormProps &
   (
     | {
         getFieldDefaultValue: (field: Field) => any;
-        fields: Field[] | (() => Promise<Field[]>);
+        fields: Field[];
       }
     | { fields?: undefined; getFieldDefaultValue?: undefined }
   );

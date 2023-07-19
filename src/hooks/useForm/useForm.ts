@@ -16,35 +16,35 @@
 
 import { useForm as useReactHookForm, UseFormReturn } from "react-hook-form";
 import { UseFormProps } from "./useForm.types";
-import { useCallback, useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Field } from "../../types";
 
 function useForm(props?: UseFormProps): UseFormReturn {
   const { fields, getFieldDefaultValue, ...forwarded } =
     props || ({} as UseFormProps);
-
-  const getAllDefaultValues = useCallback(
-    (fields: Field[]) =>
-      fields?.reduce((acc: Record<string, any>, field) => {
-        acc[field.id] = getFieldDefaultValue?.(field);
-        return acc;
-      }, {}),
-    [getFieldDefaultValue]
+  const [prevFields, setPrevFields] = useState<Field[] | undefined>(
+    fields ?? undefined
   );
 
   const computedDefaultValues = useMemo(() => {
     if (getFieldDefaultValue) {
-      if (typeof fields === "function") {
-        return async () => await fields().then(getAllDefaultValues);
-      }
-
-      return getAllDefaultValues(fields);
+      return fields?.reduce((acc: Record<string, any>, field) => {
+        acc[field.id] = getFieldDefaultValue?.(field);
+        return acc;
+      }, {});
     }
-  }, [fields, getFieldDefaultValue, getAllDefaultValues]);
+  }, [fields, getFieldDefaultValue]);
 
   const defaultValues = forwarded?.defaultValues || computedDefaultValues;
+  const methods = useReactHookForm({ ...forwarded, defaultValues });
 
-  return useReactHookForm({ ...forwarded, defaultValues });
+  // if fields changes, reset the form
+  if (fields && JSON.stringify(prevFields) !== JSON.stringify(fields)) {
+    methods.reset?.(defaultValues);
+    setPrevFields(fields);
+  }
+
+  return methods;
 }
 
 export default useForm;

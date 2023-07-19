@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { mockFields, mockFieldsWithValues } from "../../__mocks__/fields";
 import Form from "./Form";
 import { FormConfigProvider } from "../FormConfigProvider";
 import { useForm } from "../../hooks";
+import { Field } from "../../types";
 
 export default {
   title: "Form",
@@ -222,12 +223,17 @@ export const WithDefaultValues = () => {
   );
 };
 
-export const WithLoadingProps = () => {
+export const WithChangingFields = () => {
+  const [fields, setFields] = useState<Field[]>([]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setFields(mockFieldsWithValues);
+    }, 2000);
+  }, []);
+
   const methods = useForm({
-    fields: async () =>
-      await new Promise((resolve) => setTimeout(resolve, 2000)).then(
-        () => mockFieldsWithValues
-      ),
+    fields,
     getFieldDefaultValue: (field) => field.value,
   });
   const [submitData, setSubmitData] = useState();
