@@ -11,3 +11,15 @@ exports[`Form should match snapshot 1`] = `
   </form>
 </DocumentFragment>
 `;
+
+exports[`Form should match snapshot with values 1`] = `
+<DocumentFragment>
+  <form>
+    <button
+      type="submit"
+    >
+      Submit
+    </button>
+  </form>
+</DocumentFragment>
+`;
