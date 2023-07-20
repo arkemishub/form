@@ -24,8 +24,8 @@ function Application() {
   return (
     <FormConfigProvider
         components={{
-          boolean: (props) => (<input {...props} type="checkbox" onChange={(e) => props.onChange(e.target.value)} />),
-          string: (props) => (<Input{...props} onChange={(e) => props.onChange(e.target.value)} />)
+          boolean: ({field}) => (<input {...field} type="checkbox" onChange={(e) => field.onChange(e.target.value)} />),
+          string: ({field}) => (<Input{...field} onChange={(e) => field.onChange(e.target.value)} />)
         }}
     >
       ...
@@ -58,8 +58,8 @@ function Application() {
            <FormField
              id="profile_image"
              // custom render ignore type 
-             render={(props) => (
-               <AvatarCustomComponent {...props} />
+             render={({field, formState, fieldState}) => (
+               <AvatarCustomComponent {...field} />
              )}
            />
          </div>
@@ -82,8 +82,8 @@ function Application() {
             onChange={(values) => console.log(values)}
             // Define here the components
             components={{
-                boolean: (props) => (<input {...props} type="checkbox" />),
-                string: (props) => (<input{...props} />)
+                boolean: ({field}) => (<input {...field} type="checkbox" />),
+                string: ({field}) => (<input{...field} />)
             }}
         >
             <div
@@ -105,6 +105,8 @@ function Application() {
 
 If you need to use the internal form state or useful functionalities, as looks the value of one field or reset the form
 state, you can use the `useForm` hook.
+
+The methods object is based on `react-hook-form` library, to understand all functionalities look the [React Hook Form Documentation](https://www.react-hook-form.com/)
 
 ```tsx
 import { Form, FormField } from '@arkejs/form'
@@ -130,6 +132,29 @@ function Application() {
                 {nameValue.length > 0 &&<FormField id="surname" type="string"/>}
             </div>
             <button type="button" onClick={() => reset()}>Reset fields</button>
+        </Form>
+    )
+}
+```
+
+## Define the DefaultValues
+
+If you need to update the default values after first render you can pass fields directly on `useForm`:
+
+```tsx
+import { Form, FormField } from '@arkejs/form'
+
+async function Application() {
+    const responseFields = await axios.get('/fields')
+    const formProps = useForm({
+        fields: responseFields.data,
+    });
+    return(
+        <Form
+            {...formProps}
+            onSubmit={(values) => setData(values)}
+        >
+            ...
         </Form>
     )
 }
