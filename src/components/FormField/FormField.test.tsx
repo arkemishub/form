@@ -19,6 +19,7 @@ import userEvent from "@testing-library/user-event";
 import FormField from "./FormField";
 import { Form } from "../Form";
 import { TestFormConfigProvider } from "../Form/Form.test";
+import { Field } from "../../types";
 
 const fields = [
   {
@@ -65,8 +66,8 @@ describe("FormField", () => {
       <Form fields={fields}>
         <FormField
           id={"name"}
-          render={(props) => (
-            <input {...props} data-testid={props.id} onChange={onChange} />
+          render={({ field }) => (
+            <input {...field} data-testid={field.id} onChange={onChange} />
           )}
         />
         <button data-testid="form-submit" type="submit">

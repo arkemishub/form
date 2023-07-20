@@ -14,62 +14,56 @@
  * limitations under the License.
  */
 
-import React, { ReactNode, useContext, useEffect } from "react";
-import { FormContext } from "../Form/Form";
-import { FieldType, FormConfigComponents, RenderProps } from "../../types";
-import { useForm as useReactHookForm } from "react-hook-form";
-import { useFormConfig } from "../Form";
+import { FieldProps } from "./FormField.types";
+import { Controller, useFormContext } from "react-hook-form";
+import { FieldType } from "../../types";
+import { useCallback } from "react";
+import { RenderProps } from "../../types/render";
 
-interface FormComponentProps {
-  id: string;
-  render?(props: RenderProps): ReactNode;
-}
+function FormField({ components, render, fields, id, ...props }: FieldProps) {
+  const { control } = useFormContext();
 
-export default function FormField(
-  props: FormComponentProps & Partial<RenderProps>
-) {
-  const config = useFormConfig();
-  const methods = useReactHookForm();
-  const { fields, components, onChange } = useContext(FormContext);
-  const { setValue, getValues } = methods;
-  const { id, render } = props;
-  const componentProps = (({ id, render, ...o }) => o)(props); // remove id and render
-  const defaultParams = {
-    onChange: (value: any) => {
-      setValue(id, value);
-      onChange?.(getValues());
-    },
-  };
-  const params =
-    {
-      ...fields?.filter((item: { id: string }) => item.id === id)?.[0],
-      ...componentProps,
-    } ?? defaultParams;
+  const field = fields?.find((item) => item.id === id);
 
-  const getComponent = () => {
-    try {
-      if (Object.keys(params).length > 0) {
-        const type = params?.type as FieldType;
-        if (!render) {
-          if (components?.[type]) {
-            return components[type]?.(params);
-          } else {
-            if (components?.default) {
-              return components.default(params);
-            } else {
-              if (config?.components[type])
-                return config?.components[type]?.(params);
-              return config?.components.default?.(params);
-            }
-          }
-        } else {
-          return render?.(params);
-        }
+  const renderField = useCallback(
+    (props: RenderProps) => {
+      if (field) {
+        const type = field?.type as FieldType;
+
+        if (render) return render(props);
+        if (components?.[type]) return components[type]?.(props);
+        if (components?.["default"]) return components["default"]?.(props);
       }
-    } catch (e) {
-      console.error(e);
-    }
-  };
 
-  return <>{getComponent()}</>;
+      return null;
+    },
+    [render, components, field]
+  );
+
+  if (!field) return null;
+
+  return (
+    <Controller
+      control={control}
+      render={(params) => {
+        return (
+          renderField?.({
+            ...params,
+            field: {
+              ...field,
+              ...params.field,
+              id,
+              onChange: (event) => {
+                params.field.onChange(event);
+                props.onChange?.(event);
+              },
+            },
+          }) ?? <></>
+        );
+      }}
+      name={id}
+    />
+  );
 }
+
+export default FormField;

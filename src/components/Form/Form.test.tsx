@@ -16,15 +16,12 @@
 
 import { render, renderHook } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import {
-  Form,
-  FormConfigProvider,
-  FormField,
-  FormProvider,
-  useForm,
-} from "../Form";
+import { Form } from "../Form";
 import { ReactNode } from "react";
-import { RenderProps } from "../../types";
+import { FormConfigProvider } from "../FormConfigProvider";
+import { useForm } from "../../hooks";
+import { Field } from "../../types";
+import FormField from "../FormField/FormField";
 
 const fields = [
   {
@@ -53,6 +50,35 @@ const fields = [
   },
 ];
 
+const fieldsWithValue = [
+  {
+    default: "Default value",
+    helper_text: null,
+    id: "name",
+    label: "Name",
+    max_length: null,
+    min_length: null,
+    multiple: false,
+    required: false,
+    type: "string",
+    values: null,
+    value: "John",
+  },
+  {
+    default: null,
+    helper_text: null,
+    id: "surname",
+    label: "Surname",
+    max_length: null,
+    min_length: null,
+    multiple: false,
+    required: false,
+    type: "string",
+    values: null,
+    value: "Doe",
+  },
+];
+
 export const TestFormConfigProvider = ({
   children,
 }: {
@@ -61,11 +87,11 @@ export const TestFormConfigProvider = ({
   return (
     <FormConfigProvider
       components={{
-        string: (props: RenderProps & { id: string; onChange?(): void }) => (
+        string: ({ field }) => (
           <input
-            {...props}
-            data-testid={props.id}
-            onChange={(e) => props.onChange(e.target.value)}
+            {...field}
+            data-testid={field.id}
+            onChange={(e) => field.onChange(e.target.value)}
           />
         ),
       }}
@@ -79,8 +105,19 @@ describe("Form", () => {
   test("should match snapshot", () => {
     const { asFragment } = render(
       <Form fields={fields}>
-        <FormField id={"name"} />
-        <FormField id={"surname"} />
+        <Form.Field id={"name"} />
+        <Form.Field id={"surname"} />
+        <button type="submit">Submit</button>
+      </Form>
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+
+  test("should match snapshot with values", () => {
+    const { asFragment } = render(
+      <Form fields={fieldsWithValue}>
+        <Form.Field id={"name"} />
+        <Form.Field id={"surname"} />
         <button type="submit">Submit</button>
       </Form>
     );
@@ -91,7 +128,7 @@ describe("Form", () => {
     const onSubmit = jest.fn();
     const { getByTestId } = render(
       <Form fields={fields} onSubmit={onSubmit}>
-        <FormField id={"name"} />
+        <Form.Field id={"name"} />
         <button data-testid="form-submit" type="submit">
           Submit
         </button>
@@ -107,7 +144,7 @@ describe("Form", () => {
     const { getByTestId } = render(
       <TestFormConfigProvider>
         <Form fields={fields} onChange={onChange}>
-          <FormField id={"name"} label="Name" />
+          <Form.Field id={"name"} label="Name" />
         </Form>
       </TestFormConfigProvider>
     );
@@ -121,7 +158,7 @@ describe("Form", () => {
     const { getByTestId } = render(
       <TestFormConfigProvider>
         <Form fields={fields} onSubmit={onSubmit}>
-          <FormField id={"name"} />
+          <Form.Field id={"name"} />
           <button data-testid="form-submit" type="submit">
             Submit
           </button>
@@ -139,16 +176,16 @@ describe("Form", () => {
         fields={fields}
         onSubmit={onSubmit}
         components={{
-          string: (props) => (
+          string: ({ field }) => (
             <input
-              {...props}
-              data-testid={props.id}
-              onChange={(e) => props.onChange(e.target.value)}
+              {...field}
+              data-testid={field.id}
+              onChange={(e) => field.onChange(e.target.value)}
             />
           ),
         }}
       >
-        <FormField id={"name"} />
+        <Form.Field id={"name"} />
         <button data-testid="form-submit" type="submit">
           Submit
         </button>
@@ -158,16 +195,148 @@ describe("Form", () => {
     expect(getByTestId("name")).toBeInTheDocument();
   });
 
-  test("should get methods with useHook and FormProvider", async () => {
+  test("should render default component if component type doesn't exist", async () => {
+    const onSubmit = jest.fn();
+    const { getByText } = render(
+      <Form
+        fields={fields}
+        onSubmit={onSubmit}
+        components={{
+          default: ({ field }) => <div>Component not found</div>,
+        }}
+      >
+        <Form.Field id={"name"} />
+        <button data-testid="form-submit" type="submit">
+          Submit
+        </button>
+      </Form>
+    );
+
+    expect(getByText("Component not found")).toBeInTheDocument();
+  });
+
+  test("should render element with updated values and props", async () => {
+    let fields = [
+      {
+        default: null,
+        helper_text: null,
+        id: "select",
+        label: "Select",
+        max_length: null,
+        min_length: null,
+        multiple: false,
+        required: false,
+        type: "string",
+        values: [{ value: 0, label: "Item 0" }],
+      },
+    ];
+
+    const mockRender = jest.fn();
+    const ComponentForm = ({ fields }: { fields: Field<any>[] }) => (
+      <Form fields={fields}>
+        <FormField
+          id={"select"}
+          render={({ field }) => {
+            // @ts-ignore
+            delete field.onChange;
+            // @ts-ignore
+            delete field.onBlur;
+            // @ts-ignore
+            delete field.ref;
+            return mockRender(field);
+          }}
+        />
+        <button data-testid="form-submit" type="submit">
+          Submit
+        </button>
+      </Form>
+    );
+    const { rerender } = render(<ComponentForm fields={fields} />);
+
+    const newFields = [
+      {
+        default: null,
+        helper_text: null,
+        id: "select",
+        label: "Select",
+        max_length: null,
+        min_length: null,
+        multiple: false,
+        required: true,
+        type: "string",
+        values: [
+          { value: 0, label: "Item 0" },
+          { value: 1, label: "Item 1" },
+          { value: 2, label: "Item 2" },
+        ],
+      },
+    ];
+
+    rerender(<ComponentForm fields={newFields} />);
+
+    expect(mockRender).toHaveBeenLastCalledWith({
+      default: null,
+      helper_text: null,
+      id: "select",
+      label: "Select",
+      max_length: null,
+      min_length: null,
+      multiple: false,
+      name: "select",
+      required: true,
+      type: "string",
+      value: undefined,
+      values: [
+        { label: "Item 0", value: 0 },
+        { label: "Item 1", value: 1 },
+        { label: "Item 2", value: 2 },
+      ],
+    });
+  });
+
+  test("should Form.Field has value if Form has fields with value", async () => {
+    const { getByTestId } = render(
+      <TestFormConfigProvider>
+        <Form fields={fieldsWithValue}>
+          <Form.Field id={"name"} label="Name" />
+        </Form>
+      </TestFormConfigProvider>
+    );
+
+    expect(getByTestId("name")).toHaveAttribute("value", "John");
+  });
+
+  test("should get defaultValue using getFieldDefaultValue", async () => {
+    const { result } = renderHook(() =>
+      useForm({
+        fields: fieldsWithValue.map((item) => {
+          // @ts-ignore
+          item.defaultValue = item.default;
+          return item;
+        }),
+        getFieldDefaultValue: (field) => field.defaultValue,
+      })
+    );
+    const { getByTestId } = render(
+      <TestFormConfigProvider>
+        <Form {...result.current.formProps}>
+          <Form.Field id={"name"} label="Name" />
+        </Form>
+      </TestFormConfigProvider>
+    );
+
+    expect(getByTestId("name")).toHaveAttribute("value", "Default value");
+  });
+
+  test("should get methods and formProps with useHook", async () => {
     const onSubmit = jest.fn();
     const { result } = renderHook(() => useForm());
-    const formProps = result.current;
-    const { register, watch, getValues, reset } = formProps.methods;
+    const { register, watch, getValues, reset } = result.current.methods;
     const { getByTestId } = render(
       <TestFormConfigProvider>
         <Form fields={fields} onSubmit={onSubmit}>
-          <FormField id={"name"} />
-          {watch("name") && <FormField id={"surname"} />}
+          <Form.Field id={"name"} />
+          {watch("name") && <Form.Field id={"surname"} />}
           <button data-testid="form-submit" type="submit">
             Submit
           </button>

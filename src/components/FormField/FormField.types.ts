@@ -14,5 +14,10 @@
  * limitations under the License.
  */
 
-export { Form } from "./Form";
-export { FormConfigProvider } from "./FormConfigProvider";
+import { Field } from "../../types";
+import { FormProps } from "../Form/Form.types";
+
+type FieldProps = Field<{ [key: string]: any }> &
+  Pick<FormProps, "components" | "fields" | "onChange"> & {};
+
+export type { FieldProps };

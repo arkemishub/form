@@ -14,5 +14,15 @@
  * limitations under the License.
  */
 
-export { Form } from "./Form";
-export { FormConfigProvider } from "./FormConfigProvider";
+import { PropsWithChildren } from "react";
+import { FormComponents } from "../../types";
+
+type FormConfigProviderProps = PropsWithChildren<{}> & {
+  components?: FormComponents;
+};
+
+type FormConfigValue = {
+  components: FormComponents;
+};
+
+export type { FormConfigValue, FormConfigProviderProps };

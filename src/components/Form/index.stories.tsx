@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import React, { ReactNode, useState } from "react";
-import Form, { useForm } from "./Form";
-import { FormConfigProvider } from "./FormConfigProvider";
-import FormField from "../FormField/FormField";
-import mockData from "../../__mocks__/mockData";
+import React, { ReactNode, useEffect, useState } from "react";
+import { mockFields, mockFieldsWithValues } from "../../__mocks__/fields";
+import Form from "./Form";
+import { FormConfigProvider } from "../FormConfigProvider";
+import { useForm } from "../../hooks";
 import { Field } from "../../types";
 
 export default {
@@ -30,28 +30,23 @@ const GeneralFormProvider = ({ children }: { children: ReactNode }) => {
   return (
     <FormConfigProvider
       components={{
-        boolean: (props: {
-          value: boolean | undefined;
-          label: string;
-          onChange(val: boolean): void;
-        }) => (
+        boolean: ({ field }) => (
           <div style={{ display: "flex" }}>
-            {/*// @ts-ignore*/}
             <input
-              {...props}
+              {...field}
               type="checkbox"
-              checked={props.value}
-              onChange={(e) => props.onChange(e.target.checked)}
+              checked={field.value}
+              onChange={(e) => field.onChange(e.target.checked)}
             />
-            <div>{props.label}</div>
+            <div>{field.label}</div>
           </div>
         ),
-        string: (props) => (
+        string: ({ field }) => (
           <>
             <input
-              {...props}
-              placeholder={props.label}
-              onChange={(e) => props.onChange(e.target.value)}
+              {...field}
+              placeholder={field.label}
+              onChange={(e) => field.onChange(e.target.value)}
             />
           </>
         ),
@@ -64,17 +59,16 @@ const GeneralFormProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export const Default = () => {
-  const methods = useForm();
-  const [fields] = useState<Field[]>(mockData);
+  const { methods } = useForm();
   const [submitData, setSubmitData] = useState({});
 
   return (
     <>
       <GeneralFormProvider>
         <Form
-          fields={fields}
+          methods={methods}
+          fields={mockFields}
           onSubmit={(values) => setSubmitData(values)}
-          // onChange={(values) => console.log(values)}
         >
           <div>
             <div
@@ -84,8 +78,8 @@ export const Default = () => {
                 gridGap: "8px 20px",
               }}
             >
-              {fields.map((field: { id: string }) => (
-                <FormField key={`field-${field.id}`} id={field.id} />
+              {mockFields.map((field: { id: string }) => (
+                <Form.Field key={`field-${field.id}`} id={field.id} />
               ))}
             </div>
             <button style={{ marginTop: 20 }}>Submit</button>
@@ -99,19 +93,17 @@ export const Default = () => {
 };
 
 export const WithFormProvider = () => {
-  const formProps = useForm();
-  const { methods } = formProps;
-  const [fields] = useState<Field[]>(mockData);
+  const { methods } = useForm();
+
   const [submitData, setSubmitData] = useState({});
 
   return (
     <>
       <GeneralFormProvider>
         <Form
-          {...formProps}
-          fields={fields}
+          methods={methods}
+          fields={mockFields}
           onSubmit={(values) => setSubmitData(values)}
-          // onChange={(values) => console.log(values)}
         >
           <div>
             <div
@@ -121,8 +113,8 @@ export const WithFormProvider = () => {
                 gridGap: "8px 20px",
               }}
             >
-              {fields.map((field: { id: string }) => (
-                <FormField key={`field-${field.id}`} id={field.id} />
+              {mockFields.map((field: { id: string }) => (
+                <Form.Field key={`field-${field.id}`} id={field.id} />
               ))}
             </div>
             <button style={{ marginTop: 20 }}>Submit</button>
@@ -151,16 +143,16 @@ export const WithFormProvider = () => {
 };
 
 export const Render = () => {
-  const [data] = useState<Field[]>(mockData);
   const [submitData, setSubmitData] = useState({});
 
   return (
     <>
       <GeneralFormProvider>
         <Form
-          fields={data}
+          fields={mockFields}
           onSubmit={(values) => setSubmitData(values)}
           onChange={(values) => console.log(values)}
+          getFieldDefaultValue={(field) => field.value}
         >
           <div>
             <div
@@ -170,20 +162,149 @@ export const Render = () => {
                 gridGap: "8px 20px",
               }}
             >
-              <FormField id="name" label="Your name" />
-              <FormField id="surname" label="Your surname" />
-              <FormField
+              <Form.Field id="name" label="Your name" />
+              <Form.Field id="surname" label="Your surname" />
+              <Form.Field
                 id="email"
                 label="Email"
-                render={(props: { onChange(val: string): void }) => (
+                render={({ field }) => (
                   <input
-                    {...props}
+                    {...field}
                     type="email"
-                    onChange={(e) => props.onChange(e.target.value)}
+                    onChange={(e) => field.onChange(e.target.value)}
                   />
                 )}
               />
-              <FormField id="active" label="Is Active?" />
+              <Form.Field id="active" label="Is Active?" />
+            </div>
+            <button style={{ marginTop: 20 }}>Submit</button>
+          </div>
+        </Form>
+      </GeneralFormProvider>
+      <br />
+      {JSON.stringify(submitData)}
+    </>
+  );
+};
+
+export const WithDefaultValues = () => {
+  const { formProps } = useForm({
+    fields: mockFieldsWithValues,
+    getFieldDefaultValue: (field) => field.value,
+  });
+  const [submitData, setSubmitData] = useState();
+
+  return (
+    <>
+      <GeneralFormProvider>
+        <Form {...formProps} onSubmit={(values) => setSubmitData(values)}>
+          <div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "auto auto auto auto",
+                gridGap: "8px 20px",
+              }}
+            >
+              {mockFieldsWithValues.map((field) => (
+                <Form.Field key={`field-${field.id}`} id={field.id} />
+              ))}
+            </div>
+            <button style={{ marginTop: 20 }}>Submit</button>
+          </div>
+        </Form>
+      </GeneralFormProvider>
+      <br />
+      {JSON.stringify(submitData)}
+    </>
+  );
+};
+
+export const WithChangingFields = () => {
+  const [fields, setFields] = useState<Field[]>([]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setFields(mockFieldsWithValues);
+    }, 2000);
+  }, []);
+
+  const { formProps } = useForm({
+    fields,
+    getFieldDefaultValue: (field) => field.value,
+  });
+  const [submitData, setSubmitData] = useState();
+
+  return (
+    <>
+      Values will load after 2 seconds
+      <GeneralFormProvider>
+        <Form {...formProps} onSubmit={(values) => setSubmitData(values)}>
+          <div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "auto auto auto auto",
+                gridGap: "8px 20px",
+              }}
+            >
+              {mockFieldsWithValues.map((field) => (
+                <Form.Field key={`field-${field.id}`} id={field.id} />
+              ))}
+            </div>
+            <button style={{ marginTop: 20 }}>Submit</button>
+          </div>
+        </Form>
+      </GeneralFormProvider>
+      <br />
+      {JSON.stringify(submitData)}
+    </>
+  );
+};
+
+export const WithInternalDependency = () => {
+  const { methods } = useForm();
+  const [submitData, setSubmitData] = useState({});
+
+  return (
+    <>
+      <GeneralFormProvider>
+        <Form
+          methods={methods}
+          fields={mockFields}
+          onSubmit={(values) => setSubmitData(values)}
+        >
+          <div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "auto auto auto auto",
+                gridGap: "8px 20px",
+              }}
+            >
+              <Form.Field
+                id="name"
+                render={({ field }) => (
+                  <input
+                    {...field}
+                    placeholder={field.label}
+                    onChange={(e) => {
+                      field.onChange(e.target.value);
+                      methods.setValue("surname", "Test");
+                    }}
+                  />
+                )}
+              />
+              <Form.Field
+                id="surname"
+                render={({ field }) => (
+                  <input
+                    {...field}
+                    placeholder={field.label}
+                    onChange={(e) => field.onChange(e.target.value)}
+                  />
+                )}
+              />
             </div>
             <button style={{ marginTop: 20 }}>Submit</button>
           </div>

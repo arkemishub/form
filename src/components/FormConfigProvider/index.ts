@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 
-export { Form } from "./Form";
-export { FormConfigProvider } from "./FormConfigProvider";
+export { default as FormConfigProvider } from "./FormConfigProvider";
+export * from "./FormConfigProvider.types";

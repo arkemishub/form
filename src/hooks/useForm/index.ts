@@ -14,21 +14,4 @@
  * limitations under the License.
  */
 
-export type Field = {
-  id: string;
-  render: string;
-} & any;
-
-export enum FieldType {
-  Bool = "boolean",
-  Date = "date",
-  Datetime = "datetime",
-  List = "list",
-  Dict = "dict",
-  link = "link",
-  Float = "float",
-  Integer = "integer",
-  String = "string",
-  Time = "time",
-  Default = "default",
-}
+export { default as useForm } from "./useForm";
