@@ -20,6 +20,8 @@ import { Form } from "../Form";
 import { ReactNode } from "react";
 import { FormConfigProvider } from "../FormConfigProvider";
 import { useForm } from "../../hooks";
+import { Field } from "../../types";
+import FormField from "../FormField/FormField";
 
 const fields = [
   {
@@ -211,6 +213,85 @@ describe("Form", () => {
     );
 
     expect(getByText("Component not found")).toBeInTheDocument();
+  });
+
+  test("should render element with updated values and props", async () => {
+    let fields = [
+      {
+        default: null,
+        helper_text: null,
+        id: "select",
+        label: "Select",
+        max_length: null,
+        min_length: null,
+        multiple: false,
+        required: false,
+        type: "string",
+        values: [{ value: 0, label: "Item 0" }],
+      },
+    ];
+
+    const mockRender = jest.fn();
+    const ComponentForm = ({ fields }: { fields: Field<any>[] }) => (
+      <Form fields={fields}>
+        <FormField
+          id={"select"}
+          render={({ field }) => {
+            // @ts-ignore
+            delete field.onChange;
+            // @ts-ignore
+            delete field.onBlur;
+            // @ts-ignore
+            delete field.ref;
+            return mockRender(field);
+          }}
+        />
+        <button data-testid="form-submit" type="submit">
+          Submit
+        </button>
+      </Form>
+    );
+    const { rerender } = render(<ComponentForm fields={fields} />);
+
+    const newFields = [
+      {
+        default: null,
+        helper_text: null,
+        id: "select",
+        label: "Select",
+        max_length: null,
+        min_length: null,
+        multiple: false,
+        required: true,
+        type: "string",
+        values: [
+          { value: 0, label: "Item 0" },
+          { value: 1, label: "Item 1" },
+          { value: 2, label: "Item 2" },
+        ],
+      },
+    ];
+
+    rerender(<ComponentForm fields={newFields} />);
+
+    expect(mockRender).toHaveBeenLastCalledWith({
+      default: null,
+      helper_text: null,
+      id: "select",
+      label: "Select",
+      max_length: null,
+      min_length: null,
+      multiple: false,
+      name: "select",
+      required: true,
+      type: "string",
+      value: undefined,
+      values: [
+        { label: "Item 0", value: 0 },
+        { label: "Item 1", value: 1 },
+        { label: "Item 2", value: 2 },
+      ],
+    });
   });
 
   test("should Form.Field has value if Form has fields with value", async () => {
