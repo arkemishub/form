@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/arkemishub/form/compare/v1.5.0...v1.6.0) (2023-07-20)
+
+
+### Features
+
+* form refactor  ([#12](https://github.com/arkemishub/form/issues/12)) ([116f9b2](https://github.com/arkemishub/form/commit/116f9b2c1e8b9b3911c1079b24511d00ad8ddc87)), closes [#13](https://github.com/arkemishub/form/issues/13) [#14](https://github.com/arkemishub/form/issues/14)
+
 # [1.5.0](https://github.com/arkemishub/form/compare/v1.4.1...v1.5.0) (2023-07-17)
 
 
