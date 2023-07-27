@@ -1,6 +1,10 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Form, FormConfigProvider, useForm, Field } from "@arkejs/form";
-import { fields, fieldsWithValues } from "../mocks/fields.ts";
+import {
+  fields,
+  fieldsWithValues,
+  fieldsWithNestedFields,
+} from "../mocks/fields.ts";
 
 export default {
   title: "Form",
@@ -188,6 +192,39 @@ export const WithDefaultValues = () => {
               }}
             >
               {fieldsWithValues.map((field) => (
+                <Form.Field key={`field-${field.id}`} id={field.id} />
+              ))}
+            </div>
+            <button style={{ marginTop: 20 }}>Submit</button>
+          </div>
+        </Form>
+      </GeneralFormProvider>
+      <br />
+      {JSON.stringify(submitData)}
+    </>
+  );
+};
+
+export const WithNestedObjects = () => {
+  const { formProps } = useForm({
+    fields: fieldsWithNestedFields,
+    getFieldDefaultValue: (field) => field.value,
+  });
+  const [submitData, setSubmitData] = useState();
+
+  return (
+    <>
+      <GeneralFormProvider>
+        <Form {...formProps} onSubmit={(values) => setSubmitData(values)}>
+          <div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "auto auto auto auto",
+                gridGap: "8px 20px",
+              }}
+            >
+              {fieldsWithNestedFields.map((field) => (
                 <Form.Field key={`field-${field.id}`} id={field.id} />
               ))}
             </div>
