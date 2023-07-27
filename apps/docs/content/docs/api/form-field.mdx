@@ -1,0 +1,37 @@
+---
+title: FormField
+---
+
+## id
+
+```ts
+id: string
+```
+
+The `id` of the field.
+
+## type
+
+```ts
+type: FieldType | string
+```
+
+The type of the field. Used for matching with Form `component` prop.
+
+
+## render
+
+```ts
+render: (props: RenderProps) => ReactElement
+```
+
+A render function that allows you to render the field however you want. This is useful for creating custom fields.
+
+
+## onChange
+
+```ts
+onChange: (event: { target: any; type?: any }) => void
+```
+
+A function that is called when the field value changes.

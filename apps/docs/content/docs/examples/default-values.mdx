@@ -1,0 +1,19 @@
+---
+title: Default values
+toc: false
+---
+
+In order to set `defaultValues` you can follow `react-hook-form`'s API by passing `defaultValues` as an optional argument to the `useForm` hook.
+
+Otherwise, since you're already working with `fields` prop you can pass it to `useForm` hook in order to set `defaultValues` as shown below:
+
+```tsx
+const { formProps, methods } = useForm({
+    fields: fieldsWithValues,
+    getFieldDefaultValue: (field) => field.value,
+  });
+```
+
+When using `fields` you should also provide `getFieldDefaultValue` function which will be used to set `defaultValues` for each field.
+
+<Preview id="default-values" />
