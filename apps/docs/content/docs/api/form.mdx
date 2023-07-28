@@ -1,0 +1,71 @@
+---
+title: Form
+---
+
+## `id`
+
+```ts
+id?: string
+```
+
+The `id` of the form.
+
+## `onSubmit`
+
+```ts
+onSubmit?: SubmitHandler<TFieldValues>)
+```
+
+`onSubmit` function called when the form is submitted.
+
+## `onChange`
+
+```ts
+onChange?: (event: { target: any; type?: any }) => void
+```
+
+`onChange` function called when the form is changed.
+
+## `methods`
+
+```ts
+methods?: UseFormReturn<TFieldValues>
+```
+
+Methods returned from `useForm` hook.
+
+
+## `components`
+
+```ts
+components: FormComponents;
+```
+
+An object containing the components to be used for rendering the form fields.
+It provides a way to map type such `string`, `number`, `boolean` to a custom component and also allows to define new keys for custom components.
+By using this property, you can override the default components used by the table defined by `FormConfigProvider`.
+
+
+## `fields`
+
+```ts
+fields?: Field[];
+```
+
+An array of fields to be rendered in the form.
+
+## `style`
+
+```ts
+style?: CSSProperties;
+```
+
+The style object to be applied to the form.
+
+## `className`
+
+```ts
+className?: string;
+```
+
+The className to be applied to the form.

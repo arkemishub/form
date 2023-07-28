@@ -24,14 +24,16 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Build package
-        run: pnpm build
+        run: pnpm build --filter=@arkejs/form
       - name: Test
-        run: pnpm test -- --coverage --bail --detectOpenHandles
+        run: pnpm test --filter=@arkejs/form
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
+      - uses: chromaui/action@v1
+        continue-on-error: true
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage/cobertura-coverage.xml
-          directory: coverage
-          fail_ci_if_error: false
-          verbose: true
+          workingDir: './apps/storybook'
+          debug: true
+          exitOnceUploaded: true
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
