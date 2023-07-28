@@ -18,6 +18,7 @@ import { useForm as useReactHookForm } from "react-hook-form";
 import { UseFormProps, UseFormReturn } from "./useForm.types";
 import { useMemo, useState } from "react";
 import { Field } from "../../types";
+import { getFieldsDefaultValues } from "../../utils/default-values";
 
 function useForm(props?: UseFormProps): UseFormReturn {
   const { fields, getFieldDefaultValue, ...forwarded } =
@@ -26,14 +27,10 @@ function useForm(props?: UseFormProps): UseFormReturn {
     fields ?? undefined
   );
 
-  const computedDefaultValues = useMemo(() => {
-    return fields?.reduce((acc: Record<string, any>, field) => {
-      acc[field.id] = getFieldDefaultValue
-        ? getFieldDefaultValue(field)
-        : field.value;
-      return acc;
-    }, {});
-  }, [fields, getFieldDefaultValue]);
+  const computedDefaultValues = useMemo(
+    () => getFieldsDefaultValues(fields, getFieldDefaultValue),
+    [fields, getFieldDefaultValue]
+  );
 
   const defaultValues = forwarded?.defaultValues || computedDefaultValues;
   const methods = useReactHookForm({ ...forwarded, defaultValues });

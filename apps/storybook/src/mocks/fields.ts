@@ -103,4 +103,58 @@ const fieldsWithValues = [
   },
 ];
 
-export { fields, fieldsWithValues };
+const fieldsWithNestedFields = [
+  {
+    default: null,
+    helper_text: null,
+    id: "user.info.name",
+    label: "Name",
+    value: "John",
+    max_length: null,
+    min_length: null,
+    multiple: false,
+    required: false,
+    type: "string",
+    values: null,
+  },
+  {
+    default: null,
+    helper_text: null,
+    id: "user.info.surname",
+    label: "Surname",
+    value: "Doe",
+    max_length: null,
+    min_length: null,
+    multiple: false,
+    required: false,
+    type: "string",
+    values: null,
+  },
+  {
+    default: null,
+    helper_text: null,
+    id: "user.info.email",
+    label: "Email",
+    value: "john@doe.com",
+    max_length: null,
+    min_length: null,
+    multiple: false,
+    required: false,
+    type: "string",
+    values: null,
+  },
+  {
+    default: null,
+    helper_text: null,
+    id: "user.active",
+    label: "Active",
+    max_length: null,
+    min_length: null,
+    multiple: false,
+    required: false,
+    type: "boolean",
+    values: null,
+  },
+];
+
+export { fields, fieldsWithValues, fieldsWithNestedFields };
