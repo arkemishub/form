@@ -51,6 +51,7 @@ function FormField({ components, render, fields, id, ...props }: FieldProps) {
             ...params,
             field: {
               ...field,
+              ...props,
               ...params.field,
               id,
               onChange: (event) => {
