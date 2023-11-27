@@ -16,3 +16,4 @@
 
 export { Form } from "./Form";
 export { FormConfigProvider } from "./FormConfigProvider";
+export { FormProvider } from "react-hook-form";
