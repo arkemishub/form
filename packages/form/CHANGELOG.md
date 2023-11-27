@@ -1,5 +1,11 @@
 # @arkejs/form
 
+## 1.6.3
+
+### Patch Changes
+
+- 0f17f3b: fix: export react hook form FormProvider
+
 ## 1.6.2
 
 ### Patch Changes
