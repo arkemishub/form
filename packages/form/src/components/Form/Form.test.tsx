@@ -124,6 +124,24 @@ describe("Form", () => {
     expect(asFragment()).toMatchSnapshot();
   });
 
+  test("should match snapshot with custom Fields component", () => {
+    const FieldsComponent = () => (
+      <>
+        <Form.Field id={"name"} />
+        <Form.Field id={"surname"} />
+      </>
+    );
+    const { asFragment } = render(
+      <TestFormConfigProvider>
+        <Form fields={fieldsWithValue}>
+          <FieldsComponent />
+          <button type="submit">Submit</button>
+        </Form>
+      </TestFormConfigProvider>
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+
   test("should call onSubmit when submit button is clicked", async () => {
     const onSubmit = jest.fn();
     const { getByTestId } = render(
