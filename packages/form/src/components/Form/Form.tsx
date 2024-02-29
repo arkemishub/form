@@ -53,13 +53,12 @@ function FormComponent({
       return Children.map(children, (child) => {
         if (isValidElement(child)) {
           const reactChild = child as ReactElement;
-          const fieldProps = {
-            components,
-            fields,
-            onChange,
-          };
           if (reactChild?.type === FormField) {
-            return cloneElement(reactChild, fieldProps);
+            return cloneElement(reactChild, {
+              components,
+              fields,
+              onChange,
+            });
           }
 
           if (typeof reactChild.type === "function") {
