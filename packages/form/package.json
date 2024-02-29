@@ -1,6 +1,6 @@
 {
   "name": "@arkejs/form",
-  "version": "1.6.3",
+  "version": "1.7.0",
   "description": "Form component to automate form generation process",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

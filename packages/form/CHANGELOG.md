@@ -1,5 +1,11 @@
 # @arkejs/form
 
+## 1.7.0
+
+### Minor Changes
+
+- 59f69a8: Support React children components
+
 ## 1.6.3
 
 ### Patch Changes
