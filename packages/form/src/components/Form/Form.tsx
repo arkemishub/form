@@ -18,6 +18,7 @@ import { FormProvider } from "react-hook-form";
 import {
   Children,
   cloneElement,
+  createElement,
   isValidElement,
   ReactElement,
   ReactNode,
@@ -52,13 +53,18 @@ function FormComponent({
       return Children.map(children, (child) => {
         if (isValidElement(child)) {
           const reactChild = child as ReactElement;
-
           if (reactChild?.type === FormField) {
             return cloneElement(reactChild, {
               components,
               fields,
               onChange,
             });
+          }
+
+          if (typeof reactChild.type === "function") {
+            // @ts-ignore: This expression is not callable
+            let children = reactChild.type();
+            return buildChildren(children);
           }
 
           if (reactChild.props?.children) {

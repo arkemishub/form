@@ -24,7 +24,6 @@ function FormField({ components, render, fields, id, ...props }: FieldProps) {
   const { control } = useFormContext();
 
   const field = fields?.find((item) => item.id === id);
-
   const renderField = useCallback(
     (props: RenderProps) => {
       if (field) {

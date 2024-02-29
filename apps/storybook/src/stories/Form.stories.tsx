@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, FormConfigProvider, useForm, Field } from "@arkejs/form";
 import {
   fields,
@@ -11,7 +11,7 @@ export default {
   component: Form,
 };
 
-const GeneralFormProvider = ({ children }: { children: ReactNode }) => {
+const GeneralFormProvider = ({ children }: { children: any }) => {
   return (
     <FormConfigProvider
       components={{
@@ -326,6 +326,51 @@ export const WithInternalDependency = () => {
             </div>
             <button style={{ marginTop: 20 }}>Submit</button>
           </div>
+        </Form>
+      </GeneralFormProvider>
+      <br />
+      {JSON.stringify(submitData)}
+    </>
+  );
+};
+
+export const WithCustomFieldComponent = () => {
+  const { methods } = useForm();
+  const [submitData, setSubmitData] = useState({});
+
+  const TestSubComponent = () => {
+    return (
+      <>
+        <div>
+          <div>Surname</div>
+          <Form.Field id="surname" />
+        </div>
+      </>
+    );
+  };
+
+  const TestComponent = () => {
+    return (
+      <>
+        <div>
+          <div>Name</div>
+          <Form.Field id="name" />
+        </div>
+        <TestSubComponent />
+      </>
+    );
+  };
+
+  return (
+    <>
+      <GeneralFormProvider>
+        <Form
+          methods={methods}
+          fields={fields}
+          onSubmit={(values) => setSubmitData(values)}
+        >
+          <TestComponent />
+          <button style={{ marginTop: 20 }}>Submit</button>
         </Form>
       </GeneralFormProvider>
       <br />

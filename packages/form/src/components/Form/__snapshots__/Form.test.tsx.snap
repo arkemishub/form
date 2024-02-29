@@ -12,6 +12,35 @@ exports[`Form should match snapshot 1`] = `
 </DocumentFragment>
 `;
 
+exports[`Form should match snapshot with custom Fields component 1`] = `
+<DocumentFragment>
+  <form>
+    <input
+      data-testid="name"
+      default=""
+      id="name"
+      label="Name"
+      name="name"
+      type="string"
+      value="John"
+    />
+    <input
+      data-testid="surname"
+      id="surname"
+      label="Surname"
+      name="surname"
+      type="string"
+      value="Doe"
+    />
+    <button
+      type="submit"
+    >
+      Submit
+    </button>
+  </form>
+</DocumentFragment>
+`;
+
 exports[`Form should match snapshot with values 1`] = `
 <DocumentFragment>
   <form>
