@@ -63,7 +63,7 @@ function FormComponent({
 
           if (typeof reactChild.type === "function") {
             // @ts-ignore: This expression is not callable
-            let children = reactChild.type();
+            let children = reactChild.type(reactChild.props);
             return buildChildren(children);
           }
 
