@@ -334,11 +334,13 @@ export const WithInternalDependency = () => {
   );
 };
 
+type SubComponentProps = { isTest: boolean; methods: any };
 export const WithCustomFieldComponent = () => {
   const { methods } = useForm();
   const [submitData, setSubmitData] = useState({});
 
-  const TestSubComponent = () => {
+  const TestSubComponent = (props: SubComponentProps) => {
+    console.log("TestSubComponentProps", props);
     return (
       <>
         <div>
@@ -349,14 +351,15 @@ export const WithCustomFieldComponent = () => {
     );
   };
 
-  const TestComponent = () => {
+  const TestComponent = (props: SubComponentProps) => {
+    console.log("TestComponentProps", props);
     return (
       <>
         <div>
           <div>Name</div>
           <Form.Field id="name" />
         </div>
-        <TestSubComponent />
+        <TestSubComponent {...props} />
       </>
     );
   };
@@ -369,7 +372,7 @@ export const WithCustomFieldComponent = () => {
           fields={fields}
           onSubmit={(values) => setSubmitData(values)}
         >
-          <TestComponent />
+          <TestComponent isTest methods={methods} />
           <button style={{ marginTop: 20 }}>Submit</button>
         </Form>
       </GeneralFormProvider>
