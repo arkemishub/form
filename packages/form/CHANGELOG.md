@@ -1,5 +1,11 @@
 # @arkejs/form
 
+## 1.7.1
+
+### Patch Changes
+
+- 6bcfb06: add props on childs react components
+
 ## 1.7.0
 
 ### Minor Changes
