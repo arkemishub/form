@@ -20,7 +20,16 @@ import { FieldType } from "../../types";
 import { useCallback } from "react";
 import { RenderProps } from "../../types/render";
 
-function FormField({ components, render, fields, id, ...props }: FieldProps) {
+function FormField({
+  components,
+  render,
+  fields,
+  id,
+  rules,
+  defaultValue,
+  shouldUnregister,
+  ...props
+}: FieldProps) {
   const { control } = useFormContext();
 
   const field = fields?.find((item) => item.id === id);
@@ -43,6 +52,10 @@ function FormField({ components, render, fields, id, ...props }: FieldProps) {
 
   return (
     <Controller
+      name={id}
+      rules={rules}
+      defaultValue={defaultValue}
+      shouldUnregister={shouldUnregister}
       control={control}
       render={(params) => {
         return (
@@ -61,7 +74,6 @@ function FormField({ components, render, fields, id, ...props }: FieldProps) {
           }) ?? <></>
         );
       }}
-      name={id}
     />
   );
 }
