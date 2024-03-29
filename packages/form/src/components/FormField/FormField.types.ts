@@ -16,8 +16,12 @@
 
 import { Field } from "../../types";
 import { FormProps } from "../Form/Form.types";
+import { UseControllerProps } from "react-hook-form";
 
 type FieldProps = Field<{ [key: string]: any }> &
-  Pick<FormProps, "components" | "fields" | "onChange"> & {};
+  Pick<
+    FormProps,
+    "components" | "fields" | "onChange"
+  > & {} & Partial<UseControllerProps>;
 
 export type { FieldProps };

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Form, FormConfigProvider, useForm, Field } from "@arkejs/form";
 import {
   fields,
@@ -378,6 +378,69 @@ export const WithCustomFieldComponent = () => {
       </GeneralFormProvider>
       <br />
       {JSON.stringify(submitData)}
+    </>
+  );
+};
+
+export const WithRulesValidation = () => {
+  const { methods } = useForm();
+  const {
+    formState: { errors },
+  } = methods;
+
+  const ValidationWrapper = ({
+    id,
+    children,
+  }: {
+    id: string;
+    children: ReactNode;
+  }) => (
+    <div>
+      {children}
+      <div style={Boolean(errors[id]) ? { color: "red" } : {}}>
+        {errors[id]?.message as string}
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      <GeneralFormProvider>
+        <Form
+          methods={methods}
+          fields={fields}
+          onSubmit={(values) => console.log(values)}
+        >
+          <div>
+            <ValidationWrapper id="name">
+              <div>Name</div>
+              <Form.Field
+                id="name"
+                rules={{
+                  required: "Name is required",
+                }}
+              />
+            </ValidationWrapper>
+            <ValidationWrapper id="email">
+              <div>Email</div>
+              <Form.Field
+                id="email"
+                rules={{
+                  required: "Email is required",
+                  minLength: {
+                    value: 4,
+                    message: "Minimum length is 4",
+                  },
+                  validate: (v) =>
+                    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
+                    "Email address must be a valid address",
+                }}
+              />
+            </ValidationWrapper>
+          </div>
+          <button style={{ marginTop: 20 }}>Submit</button>
+        </Form>
+      </GeneralFormProvider>
     </>
   );
 };
