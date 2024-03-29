@@ -20,16 +20,16 @@ import { FieldType } from "../../types";
 import { useCallback } from "react";
 import { RenderProps } from "../../types/render";
 
-function FormField(props: FieldProps) {
-  const {
-    components,
-    render,
-    fields,
-    id,
-    rules,
-    defaultValue,
-    shouldUnregister,
-  } = props;
+function FormField({
+  components,
+  render,
+  fields,
+  id,
+  rules,
+  defaultValue,
+  shouldUnregister,
+  ...props
+}: FieldProps) {
   const { control } = useFormContext();
 
   const field = fields?.find((item) => item.id === id);
