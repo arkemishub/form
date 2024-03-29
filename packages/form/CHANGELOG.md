@@ -1,5 +1,11 @@
 # @arkejs/form
 
+## 1.8.0
+
+### Minor Changes
+
+- c7b2481: Add rules and validation on Controller
+
 ## 1.7.1
 
 ### Patch Changes
